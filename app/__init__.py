@@ -27,4 +27,7 @@ def create_app(config=Config):
     from app.user import bp as user_bp
     app.register_blueprint(user_bp)
 
+    from app.error import bp as error_bp
+    app.register_blueprint(error_bp)
+
     return app
