@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect
+from flask import render_template, url_for, flash, redirect, abort
 from flask_login import current_user, login_user, logout_user
 
 from app import db
@@ -21,7 +21,7 @@ def login():
         return redirect(url_for('index'))
     return render_template('user/login.html', form=form)
 
-@bp.route('/logout')
+@bp.route('/logout', methods=['GET'])
 def logout():
     if current_user.is_authenticated:
         logout_user()
@@ -40,3 +40,10 @@ def signup():
         flash('Congratulations! You are now a registered user.')
         return redirect(url_for('user.login'))
     return render_template('user/signup.html', form=form)
+
+@bp.route('/users/<int:id>', methods=['GET'])
+def show_user(id):
+    user = User.query.get(id)
+    if not user:
+        abort(404)
+    return render_template('user/user.html', user=user)
