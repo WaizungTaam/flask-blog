@@ -1,5 +1,5 @@
 from flask import render_template, url_for, flash, redirect, abort
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 
 from app import db
 from app.user import bp
@@ -10,7 +10,7 @@ from app.user.forms import LoginForm, SignupForm
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('user.show_user', id=current_user.id))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.verify(form.username.data, form.password.data)
@@ -18,7 +18,7 @@ def login():
             flash('Invalid username or password.')
             return redirect(url_for('user.login'))
         login_user(user, remember=form.remember_me.data)
-        return redirect(url_for('index'))
+        return redirect(url_for('user.show_user', id=user.id))
     return render_template('user/login.html', form=form)
 
 @bp.route('/logout', methods=['GET'])
@@ -31,7 +31,7 @@ def logout():
 @bp.route('/signup', methods=['GET', 'POST'])
 def signup():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('user.show_user', id=current_user.id))
     form = SignupForm()
     if form.validate_on_submit():
         user = User(form.username.data, form.password.data)
@@ -47,3 +47,31 @@ def show_user(id):
     if not user:
         abort(404)
     return render_template('user/user.html', user=user)
+
+@bp.route('/follow/<int:id>')
+@login_required
+def follow(id):
+    user = User.query.get(id)
+    if not user:
+        flash('User not found.')
+    elif user == current_user:
+        flash('Cannot follow yourself.')
+    else:
+        current_user.follow(user)
+        db.session.commit()
+        flash('Followed user {}.'.format(user.username))
+    return redirect(url_for('user.show_user', id=id))
+
+@bp.route('/unfollow/<int:id>')
+@login_required
+def unfollow(id):
+    user = User.query.get(id)
+    if not user:
+        flash('User not found.')
+    elif user == current_user:
+        flash('Cannot unfollow yourself.')
+    else:
+        current_user.unfollow(user)
+        db.session.commit()
+        flash('Unfollowed user {}'.format(user.username))
+    return redirect(url_for('user.show_user', id=id))

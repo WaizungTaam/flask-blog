@@ -3,4 +3,30 @@
 
 {% block app_content %}
   <h1>{{ user.username }}</h1>
+
+  {% if current_user.is_authenticated and user != current_user %}
+    {% if not current_user.is_following(user) %}
+      <a href="{{ url_for('user.follow', id=user.id) }}" class="btn btn-primary">Follow</a>
+    {% else %}
+      <a href="{{ url_for('user.unfollow', id=user.id) }}" class="btn btn-primary">Unfollow</a>
+    {% endif %}
+  {% endif %}
+
+  <div>
+    {{ user.followers.count() }} followers
+    <ul>
+      {% for follower in user.followers %}
+        <a href="{{ url_for('user.show_user', id=follower.id) }}">{{ follower.username }}</a>
+      {% endfor %}
+    </ul>
+  </div>
+  <div>
+    {{ user.followings.count() }} followings
+    <ul>
+      {% for following in user.followings %}
+        <a href="{{ url_for('user.show_user', id=following.id) }}">{{ following.username }}</a>
+      {% endfor %}
+    </ul>
+  </div>
+
 {% endblock %}
