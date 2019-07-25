@@ -17,6 +17,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     password = db.Column(db.String(128))
+    posts = db.relationship('Post', backref='author', lazy='dynamic')
     followings = db.relationship(
         'User',
         secondary=followers,
