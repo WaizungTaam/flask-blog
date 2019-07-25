@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block app_content %}
+  <h1>{{ post.title }}</h1>
+  <p>{{ post.author.username }}</p>
+  <p>{{ post.content }}</p>
+  {% if current_user.is_authenticated and current_user == post.author %}
+    <div>
+      <a href="{{ url_for('post.edit_post', id=post.id) }}">Edit</a>
+      <a href="{{ url_for('post.delete_post', id=post.id) }}">Delete</a>
+    </div>
+  {% endif %}
+{% endblock %}

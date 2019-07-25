@@ -4,6 +4,10 @@ from app import db
 from app.error import bp
 
 
+@bp.app_errorhandler(403)
+def not_found_error(error):
+    return render_template('error/403.html'), 403
+
 @bp.app_errorhandler(404)
 def not_found_error(error):
     return render_template('error/404.html'), 404

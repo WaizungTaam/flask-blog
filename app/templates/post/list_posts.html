@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block app_content %}
+  <h1>Posts</h1>
+  <ul>
+    {% for post in posts %}
+      <li><a href="{{ url_for('post.show_post', id=post.id) }}">{{ post.title }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}
