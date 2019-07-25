@@ -1,9 +1,11 @@
 from flask import render_template, url_for, flash, redirect
 from flask_login import current_user, login_user, logout_user
+
 from app import db
 from app.user import bp
 from app.user.models import User
 from app.user.forms import LoginForm, SignupForm
+
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
