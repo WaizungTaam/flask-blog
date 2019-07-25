@@ -21,7 +21,8 @@ def create_app(config=Config):
 
     @app.route('/')
     def index():
-        return 'Hello World'
+        from flask import render_template
+        return render_template('index.html')
 
     from app.user import bp as user_bp
     app.register_blueprint(user_bp)
