@@ -34,6 +34,13 @@
     {% endif %}
   </div>
 
+  {% if current_user.is_authenticated and user == current_user %}
+    <div style="margin: 1.5rem 0; padding: 1rem; box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);">
+      <a href="{{ url_for('mail.mailbox') }}" class="btn btn-primary" style="padding: 0.4rem 0.9rem;">Mailbox</a>
+      <span style="margin-left: 1rem;">{{ current_user.received_mails.filter_by(read=1).count() }} unread</span>
+    </div>
+  {% endif %}
+
   <div style="margin: 1.5rem 0; padding: 1rem; box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);">
     <div>
       {% if current_user.is_authenticated and user == current_user %}
@@ -43,7 +50,6 @@
         {{ user.posts.count() }} posts
       {% endif %}
     </div>
-
     {% if user.posts.count() > 0 %}
       <ul class="list-group" style="margin: 1rem 0;">
         {% for post in user.posts %}

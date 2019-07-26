@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block app_content %}
+
+<div>
+  <table class="table">
+    <tr><td>Title</td><td>{{ mail.title }}</td></tr>
+    <tr><td>Sender</td><td><a href="{{ url_for('user.show_user', id=mail.sender.id) }}">{{ mail.sender.username }}</a></td></tr>
+    <tr><td>Receiver</td><td><a href="{{ url_for('user.show_user', id=mail.receiver.id) }}">{{ mail.receiver.username }}</a></td></tr>
+    <tr><td>Time</td><td>{{ mail.time }}</td></tr>
+    <tr><td>Content</td><td>{{ mail.content }}</td></tr>
+  </table>
+</div>
+
+{% endblock %}

@@ -26,8 +26,20 @@ class User(db.Model, UserMixin):
         backref=db.backref('followers', lazy='dynamic'),
         lazy='dynamic'
     )
-    sent_mails = db.relationship('Mail', backref='sender', lazy='dynamic')
-    received_mails = db.relationship('Mail', backref='receiver', lazy='dynamic')
+    sent_mails = db.relationship(
+        'Mail',
+        primaryjoin='User.id == Mail.sender_id',
+        backref='sender',
+        lazy='dynamic',
+        order_by='Mail.time.desc()'
+    )
+    received_mails = db.relationship(
+        'Mail',
+        primaryjoin='User.id == Mail.receiver_id',
+        backref='receiver',
+        lazy='dynamic',
+        order_by='Mail.time.desc()'
+    )
 
     def __init__(self, username, password):
         self.username = username
