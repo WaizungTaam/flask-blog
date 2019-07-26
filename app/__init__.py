@@ -31,6 +31,9 @@ def create_app(config=Config):
     from app.post import bp as post_bp
     app.register_blueprint(post_bp)
 
+    from app.mail import bp as mail_bp
+    app.register_blueprint(mail_bp)
+
     from app.error import bp as error_bp
     app.register_blueprint(error_bp)
 

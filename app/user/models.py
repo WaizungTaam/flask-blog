@@ -26,6 +26,8 @@ class User(db.Model, UserMixin):
         backref=db.backref('followers', lazy='dynamic'),
         lazy='dynamic'
     )
+    sent_mails = db.relationship('Mail', backref='sender', lazy='dynamic')
+    received_mails = db.relationship('Mail', backref='receiver', lazy='dynamic')
 
     def __init__(self, username, password):
         self.username = username
