@@ -12,7 +12,8 @@ from app.post.forms import NewPostForm, EditPostForm
 @bp.route('/posts', methods=['GET'])
 def list_posts():
     posts = Post.query.order_by(Post.mtime.desc()).all()
-    return render_template('post/list_posts.html', posts=posts)
+    return render_template('post/list_posts.html', title='List Posts',
+        posts=posts)
 
 @bp.route('/posts/new', methods=['GET', 'POST'])
 @login_required
@@ -28,12 +29,12 @@ def new_post():
         db.session.commit()
         flash('New post submitted.')
         return redirect(url_for('post.show_post', id=post.id))
-    return render_template('post/new_post.html', form=form)
+    return render_template('post/new_post.html', title='New Post', form=form)
 
 @bp.route('/posts/<int:id>', methods=['GET'])
 def show_post(id):
     post = Post.query.get_or_404(id)
-    return render_template('post/show_post.html', post=post)
+    return render_template('post/show_post.html', title=post.title, post=post)
 
 @bp.route('/posts/<int:id>/edit', methods=['GET', 'POST'])
 @login_required
@@ -51,7 +52,7 @@ def edit_post(id):
         return redirect(url_for('post.show_post', id=id))
     form.title.data = post.title
     form.content.data = post.content
-    return render_template('post/edit_post.html', form=form)
+    return render_template('post/edit_post.html', title='Edit Post', form=form)
 
 @bp.route('/posts/<int:id>/delete', methods=['GET'])
 @login_required

@@ -2,13 +2,21 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block app_content %}
-  <h1>{{ post.title }}</h1>
-  <p>{{ post.author.username }}</p>
-  <p>{{ post.content }}</p>
+
+<div>
+  <h2 class="text-center">{{ post.title }}</h2>
+  <p class="text-center" style="margin: 1.5rem 0">
+    <span style="margin: 0 1rem"><a href="{{ url_for('user.show_user', id=post.author.id) }}">{{ post.author.username }}</a></span>
+    <span style="margin: 0 1rem">{{ post.mtime }}</span>
+  </p>
+  <p style="font-size: 1.75rem; line-height: 2.75rem;">{{ post.content }}</p>
   {% if current_user.is_authenticated and current_user == post.author %}
-    <div>
-      <a href="{{ url_for('post.edit_post', id=post.id) }}">Edit</a>
-      <a href="{{ url_for('post.delete_post', id=post.id) }}">Delete</a>
+    <br><br>
+    <div class="text-center">
+      <a class="btn btn-warning" style="margin: 0 0.5rem" href="{{ url_for('post.edit_post', id=post.id) }}">Edit</a>
+      <a class="btn btn-danger" style="margin: 0 0.5rem" href="{{ url_for('post.delete_post', id=post.id) }}">Delete</a>
     </div>
   {% endif %}
+</div>
+
 {% endblock %}

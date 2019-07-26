@@ -12,35 +12,44 @@
     {% endif %}
   {% endif %}
 
-  <div>
-    {{ user.followers.count() }} followers
-    <ul>
-      {% for follower in user.followers %}
-        <li><a href="{{ url_for('user.show_user', id=follower.id) }}">{{ follower.username }}</a></li>
-      {% endfor %}
-    </ul>
-  </div>
-  <div>
-    {{ user.followings.count() }} followings
-    <ul>
-      {% for following in user.followings %}
-        <li><a href="{{ url_for('user.show_user', id=following.id) }}">{{ following.username }}</a></li>
-      {% endfor %}
-    </ul>
-  </div>
-
-  <div>
-    {% if current_user.is_authenticated and user == current_user %}
-      <a href="{{ url_for('post.new_post') }}">New</a>
+  <div style="margin: 1.5rem 0; padding: 1rem; box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);">
+    <div>{{ user.followers.count() }} followers</div>
+    {% if user.followers.count() > 0 %}
+      <ul class="list-group">
+        {% for follower in user.followers %}
+          <li class="list-group-item"><a href="{{ url_for('user.show_user', id=follower.id) }}">{{ follower.username }}</a></li>
+        {% endfor %}
+      </ul>
     {% endif %}
   </div>
-  <div>
-    {{ user.posts.count() }} posts
-    <ul>
-      {% for post in user.posts %}
-        <li><a href="{{ url_for('post.show_post', id=post.id) }}">{{ post.title }}</a></li>
-      {% endfor %}
-    </ul>
+
+  <div style="margin: 1.5rem 0; padding: 1rem; box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);">
+    <div>{{ user.followings.count() }} followings</div>
+    {% if user.followings.count() > 0 %}
+      <ul class="list-group">
+        {% for following in user.followings %}
+          <li class="list-group-item"><a href="{{ url_for('user.show_user', id=following.id) }}">{{ following.username }}</a></li>
+        {% endfor %}
+      </ul>
+    {% endif %}
   </div>
 
+  <div style="margin: 1.5rem 0; padding: 1rem; box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);">
+    <div>
+      {% if current_user.is_authenticated and user == current_user %}
+        <span>{{ user.posts.count() }} posts</span>
+        <span style="margin: 0 1rem;"><a class="btn btn-primary" style="padding: 0.2rem 0.7rem" href="{{ url_for('post.new_post') }}">New</a></span>
+      {% else %}
+        {{ user.posts.count() }} posts
+      {% endif %}
+    </div>
+
+    {% if user.posts.count() > 0 %}
+      <ul class="list-group" style="margin: 1rem 0;">
+        {% for post in user.posts %}
+          <li class="list-group-item"><a href="{{ url_for('post.show_post', id=post.id) }}">{{ post.title }}</a></li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
 {% endblock %}

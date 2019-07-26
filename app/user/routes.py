@@ -19,7 +19,7 @@ def login():
             return redirect(url_for('user.login'))
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for('user.show_user', id=user.id))
-    return render_template('user/login.html', form=form)
+    return render_template('user/login.html', title='Login', form=form)
 
 @bp.route('/logout', methods=['GET'])
 def logout():
@@ -39,14 +39,14 @@ def signup():
         db.session.commit()
         flash('Congratulations! You are now a registered user.')
         return redirect(url_for('user.login'))
-    return render_template('user/signup.html', form=form)
+    return render_template('user/signup.html', title='Signup', form=form)
 
 @bp.route('/users/<int:id>', methods=['GET'])
 def show_user(id):
     user = User.query.get(id)
     if not user:
         abort(404)
-    return render_template('user/user.html', user=user)
+    return render_template('user/user.html', title=user.username, user=user)
 
 @bp.route('/follow/<int:id>')
 @login_required

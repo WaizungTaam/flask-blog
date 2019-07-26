@@ -3,9 +3,21 @@
 
 {% block app_content %}
   <h1>Posts</h1>
-  <ul>
+  <div>
     {% for post in posts %}
-      <li><a href="{{ url_for('post.show_post', id=post.id) }}">{{ post.title }}</a></li>
+      <div class="card" style="margin: 1.5rem 0; box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);">
+        <div class="card-body" style="padding: 0.5rem 2rem 0.5rem 2rem">
+          <div>
+            <a href="{{ url_for('post.show_post', id=post.id) }}" class="card-link text-body">
+              <h5 class="card-title mb-1">{{ post.title }}</h5>
+            </a>
+          </div>
+          <div class="text-right">
+            <span style="margin-left: 1.5rem"><a href="{{ url_for('user.show_user', id=post.author.id) }}" class="card-link text-muted">{{ post.author.username }}</a></span>
+            <span style="margin-left: 1.5rem" class="small text-muted">{{ post.mtime }}</span>
+          </div>
+        </div>
+      </div>
     {% endfor %}
-  </ul>
+  </div>
 {% endblock %}
