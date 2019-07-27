@@ -1,6 +1,7 @@
 from datetime import datetime
 
-from flask import render_template, redirect, url_for, flash, request, abort
+from flask import render_template, redirect, url_for, flash, request, abort, \
+    request, current_app
 from flask_login import current_user, login_required
 
 from app import db
@@ -11,9 +12,15 @@ from app.post.forms import NewPostForm, EditPostForm, CommentForm
 
 @bp.route('/posts', methods=['GET'])
 def list_posts():
-    posts = Post.query.order_by(Post.mtime.desc()).all()
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.order_by(Post.mtime.desc()).paginate(
+        page, current_app.config['POSTS_PER_PAGE'])
+    prev_url = url_for('post.list_posts', page=posts.prev_num) \
+        if posts.has_prev else None
+    next_url = url_for('post.list_posts', page=posts.next_num) \
+        if posts.has_next else None
     return render_template('post/list_posts.html', title='List Posts',
-        posts=posts)
+        posts=posts.items, page=page, prev_url=prev_url, next_url=next_url)
 
 @bp.route('/posts/new', methods=['GET', 'POST'])
 @login_required
