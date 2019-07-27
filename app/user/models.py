@@ -40,6 +40,7 @@ class User(db.Model, UserMixin):
         lazy='dynamic',
         order_by='Mail.time.desc()'
     )
+    comments = db.relationship('Comment', backref='author', lazy='dynamic')
 
     def __init__(self, username, password):
         self.username = username
