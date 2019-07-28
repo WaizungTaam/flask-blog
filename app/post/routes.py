@@ -8,6 +8,7 @@ from app import db
 from app.post import bp
 from app.post.models import Post, Comment
 from app.post.forms import NewPostForm, EditPostForm, CommentForm
+from app.post.utils import make_abstract
 
 
 @bp.route('/posts', methods=['GET'])
@@ -30,6 +31,7 @@ def new_post():
         post = Post(
             title=request.form.get('title'),
             content=request.form.get('content'),
+            abstract=make_abstract(request.form.get('content')),
             author=current_user
         )
         db.session.add(post)
