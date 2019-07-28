@@ -1,9 +1,11 @@
 from datetime import datetime
 from app import db
+from app.search.models import SearchableMixin
 
 
-class Post(db.Model):
+class Post(db.Model, SearchableMixin):
     __tablename__ = 'posts'
+    __searchable__ = ['title', 'content']
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(140))

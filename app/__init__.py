@@ -3,6 +3,7 @@ from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from elasticsearch import Elasticsearch
 from config import Config
 
 db = SQLAlchemy()
@@ -20,6 +21,9 @@ def create_app(config=Config):
     login.init_app(app)
     bootstrap.init_app(app)
 
+    app.elasticsearch = Elasticsearch([app.config['ELASTICSEARCH_URL']]) \
+            if app.config['ELASTICSEARCH_URL'] else None
+
     @app.route('/')
     def index():
         from flask import render_template
@@ -33,6 +37,9 @@ def create_app(config=Config):
 
     from app.mail import bp as mail_bp
     app.register_blueprint(mail_bp)
+
+    from app.search import bp as search_bp
+    app.register_blueprint(search_bp)
 
     from app.error import bp as error_bp
     app.register_blueprint(error_bp)

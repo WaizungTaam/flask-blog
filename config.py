@@ -18,3 +18,5 @@ class Config:
         os.path.join(basedir, 'app/uploads')
     MAX_CONTENT_LENGTH = int(os.environ.get('MAX_CONTENT_LENGTH')) or \
         5 * 1024 * 1024
+
+    ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
