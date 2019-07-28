@@ -3,5 +3,92 @@
 
 {% block app_content %}
   <h1>Edit Post</h1>
-  <div>{{ wtf.quick_form(form) }}</div>
+
+  <form class="form" method="post" role="form" id="edit_post">
+    {{ form.hidden_tag() }}
+    {{ wtf.form_errors(form, hiddens="only") }}
+
+    <div class="form-group required">
+      <label class="control-label" for="title">Title</label>
+      <input class="form-control" id="title" name="title" required type="text" value="{{ post.title }}">
+    </div>
+
+    <div class="form-group">
+      <label class="control-label" for="content">Content</label>
+      <div>
+        <div id="toolbar-container">
+          <span class="ql-formats">
+            <select class="ql-font"></select>
+            <select class="ql-size"></select>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-bold"></button>
+            <button class="ql-italic"></button>
+            <button class="ql-underline"></button>
+            <button class="ql-strike"></button>
+          </span>
+          <span class="ql-formats">
+            <select class="ql-color"></select>
+            <select class="ql-background"></select>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-script" value="sub"></button>
+            <button class="ql-script" value="super"></button>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-header" value="1"></button>
+            <button class="ql-header" value="2"></button>
+            <button class="ql-blockquote"></button>
+            <button class="ql-code-block"></button>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-list" value="ordered"></button>
+            <button class="ql-list" value="bullet"></button>
+            <button class="ql-indent" value="-1"></button>
+            <button class="ql-indent" value="+1"></button>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-direction" value="rtl"></button>
+            <select class="ql-align"></select>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-link"></button>
+            <button class="ql-image"></button>
+            <button class="ql-video"></button>
+            <button class="ql-formula"></button>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-clean"></button>
+          </span>
+        </div>
+        <div class="form-control" id="content" name="content" style="height: 20rem; font-size: 1.5rem;">{{ post.content|safe }}</div>
+      </div>
+    </div>
+
+    {{ wtf.form_field(form.submit) }}
+  </form>
 {% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+  var quill = new Quill('#content', {
+    theme: 'snow',
+    modules: {
+      toolbar: '#toolbar-container'
+    }
+  });
+
+  $("#edit_post").submit(function (e) {
+    var title = $("#title").val();
+    var content = quill.root.innerHTML;
+    $.post("/posts/{{ post.id }}/edit", {
+      title: title,
+      content: content
+    }, function (res) {
+        window.location = res.url;
+    });
+    return false;
+  });
+  </script>
+{%- endblock scripts %}

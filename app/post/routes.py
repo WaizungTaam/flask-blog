@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from flask import render_template, redirect, url_for, flash, request, abort, \
-    request, current_app
+    request, current_app, jsonify
 from flask_login import current_user, login_required
 
 from app import db
@@ -26,16 +26,19 @@ def list_posts():
 @login_required
 def new_post():
     form = NewPostForm()
-    if form.validate_on_submit():
+    if request.method == 'POST':
         post = Post(
-            title=form.title.data,
-            content=form.content.data,
+            title=request.form.get('title'),
+            content=request.form.get('content'),
             author=current_user
         )
         db.session.add(post)
         db.session.commit()
         flash('New post submitted.')
-        return redirect(url_for('post.show_post', id=post.id))
+        return jsonify({
+            'ok': True,
+            'url': url_for('post.show_post', id=post.id)
+        })
     return render_template('post/new_post.html', title='New Post', form=form)
 
 @bp.route('/posts/<int:id>', methods=['GET', 'POST'])
@@ -63,18 +66,27 @@ def show_post(id):
 def edit_post(id):
     post = Post.query.get_or_404(id)
     if current_user != post.author:
-        abort(403)
+        if request.method == 'GET':
+            abort(403)
+        if request.method == 'POST':
+            return jsonify({
+                'ok': False,
+                'code': 403,
+                'url': url_for('error.forbidden_error')
+            })
     form = EditPostForm()
-    if form.validate_on_submit():
-        post.title = form.title.data
-        post.content = form.content.data
+    if request.method == 'POST':
+        post.title = request.form.get('title')
+        post.content = request.form.get('content')
         post.mtime = datetime.utcnow()
         db.session.commit()
         flash('Post updated.')
-        return redirect(url_for('post.show_post', id=id))
-    form.title.data = post.title
-    form.content.data = post.content
-    return render_template('post/edit_post.html', title='Edit Post', form=form)
+        return jsonify({
+            'ok': True,
+            'url': url_for('post.show_post', id=id)
+        })
+    return render_template('post/edit_post.html', title='Edit Post',
+        form=form, post=post)
 
 @bp.route('/posts/<int:id>/delete', methods=['GET'])
 @login_required

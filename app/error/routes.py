@@ -5,7 +5,7 @@ from app.error import bp
 
 
 @bp.app_errorhandler(403)
-def not_found_error(error):
+def forbidden_error(error):
     return render_template('error/403.html', title='403'), 403
 
 @bp.app_errorhandler(404)
