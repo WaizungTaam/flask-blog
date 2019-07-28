@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
+from flask_wtf.recaptcha import Recaptcha, RecaptchaField
 from wtforms import StringField, PasswordField, BooleanField, SelectField, \
     DateField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired, EqualTo, Length, Email, \
@@ -11,6 +12,7 @@ from app.user.models import User
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
+    recaptcha = RecaptchaField(validators=[Recaptcha('Verification Failed')])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
@@ -22,6 +24,7 @@ class SignupForm(FlaskForm):
         validators=[DataRequired(), Length(min=6)])
     password2 = PasswordField('Repeat Password',
         validators=[DataRequired(), EqualTo('password')])
+    recaptcha = RecaptchaField(validators=[Recaptcha('Verification Failed')])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Signup')
 

@@ -20,3 +20,6 @@ class Config:
         5 * 1024 * 1024
 
     ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
+
+    RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC_KEY')
+    RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY')
