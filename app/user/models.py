@@ -12,6 +12,12 @@ followers = db.Table(
     db.Column('following_id', db.Integer, db.ForeignKey('users.id'))
 )
 
+stars = db.Table(
+    'stars',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
+    db.Column('post_id', db.Integer, db.ForeignKey('posts.id'))
+)
+
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -44,6 +50,14 @@ class User(db.Model, UserMixin):
     )
     comments = db.relationship('Comment', backref='author', lazy='dynamic')
     profile = db.relationship('Profile', uselist=False, backref='user')
+    stars = db.relationship(
+        'Post',
+        secondary=stars,
+        primaryjoin='User.id == stars.c.user_id',
+        secondaryjoin='stars.c.post_id == Post.id',
+        backref=db.backref('stars', lazy='dynamic'),
+        lazy='dynamic'
+    )
 
     def __init__(self, username, password):
         self.username = username
@@ -66,6 +80,18 @@ class User(db.Model, UserMixin):
     def unfollow(self, user):
         if self.is_following(user):
             self.followings.remove(user)
+
+    def has_starred(self, post):
+        return self.stars.filter(
+            stars.c.post_id == post.id).count() > 0
+
+    def star(self, post):
+        if not self.has_starred(post):
+            self.stars.append(post)
+
+    def unstar(self, post):
+        if self.has_starred(post):
+            self.stars.remove(post)
 
 
 @login.user_loader

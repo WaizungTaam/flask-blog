@@ -98,3 +98,21 @@ def delete_post(id):
     db.session.commit()
     flash('Post deleted.')
     return redirect(url_for('user.show_user', id=current_user.id))
+
+@bp.route('/posts/<int:id>/star', methods=['GET'])
+@login_required
+def star_post(id):
+    post = Post.query.get_or_404(id)
+    current_user.star(post)
+    db.session.commit()
+    flash('Starred.')
+    return redirect(url_for('post.show_post', id=id))
+
+@bp.route('/posts/<int:id>/unstar', methods=['GET'])
+@login_required
+def unstar_post(id):
+    post = Post.query.get_or_404(id)
+    current_user.unstar(post)
+    db.session.commit()
+    flash('Unstarred.')
+    return redirect(url_for('post.show_post', id=id))

@@ -10,11 +10,18 @@
     <span style="margin: 0 1rem">{{ post.mtime }}</span>
   </div>
   <div class="ql-editor" style="font-size: 1.75rem; line-height: 2.75rem;">{{ post.content|safe }}</div>
-  {% if current_user.is_authenticated and current_user == post.author %}
+  {% if current_user.is_authenticated %}
     <br><br>
     <div class="text-center">
-      <a class="btn btn-warning" style="margin: 0 0.5rem" href="{{ url_for('post.edit_post', id=post.id) }}">Edit</a>
-      <a class="btn btn-danger" style="margin: 0 0.5rem" href="{{ url_for('post.delete_post', id=post.id) }}">Delete</a>
+        {% if not current_user.has_starred(post) %}
+          <a class="btn btn-info" style="margin: 0 0.5rem" href="{{ url_for('post.star_post', id=post.id) }}">Star</a>
+        {% else %}
+          <a class="btn btn-info" style="margin: 0 0.5rem" href="{{ url_for('post.unstar_post', id=post.id) }}">Unstar</a>
+        {% endif %}
+      {% if current_user == post.author %}
+        <a class="btn btn-warning" style="margin: 0 0.5rem" href="{{ url_for('post.edit_post', id=post.id) }}">Edit</a>
+        <a class="btn btn-danger" style="margin: 0 0.5rem" href="{{ url_for('post.delete_post', id=post.id) }}">Delete</a>
+      {% endif %}
     </div>
   {% endif %}
 </div>
