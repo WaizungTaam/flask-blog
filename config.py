@@ -13,3 +13,8 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     POSTS_PER_PAGE = 10
+
+    UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER') or \
+        os.path.join(basedir, 'app/uploads')
+    MAX_CONTENT_LENGTH = int(os.environ.get('MAX_CONTENT_LENGTH')) or \
+        5 * 1024 * 1024

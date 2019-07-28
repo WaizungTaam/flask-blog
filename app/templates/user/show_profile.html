@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block app_content %}
+<div>
+  <table class="table">
+    <tr><td>Name</td><td>{{ profile.name or '' }}</td></tr>
+    <tr><td>Gender</td><td>{{ profile.gender or '' }}</td></tr>
+    <tr><td>Birthday</td><td>{{ profile.birthday or '' }}</td></tr>
+    <tr><td>Phone</td><td>{{ profile.phone or '' }}</td></tr>
+    <tr><td>Email</td><td>{{ profile.email or '' }}</td></tr>
+    <tr><td>Location</td><td>{{ profile.location or '' }}</td></tr>
+    <tr><td>About</td><td>{{ profile.about or '' }}</td></tr>
+    <tr><td>Avatar</td><td>{% if profile.avatar %}<img src="{{ profile.avatar }}">{% endif %}</td></tr>
+  </table>
+
+  {% if current_user.is_authenticated and current_user == profile.user %}
+    <a href="{{ url_for('user.edit_profile', id=profile.user.id) }}" class="btn btn-default">Edit</a>
+  {% endif %}
+</div>
+{% endblock %}

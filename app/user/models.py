@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -41,6 +43,7 @@ class User(db.Model, UserMixin):
         order_by='Mail.time.desc()'
     )
     comments = db.relationship('Comment', backref='author', lazy='dynamic')
+    profile = db.relationship('Profile', uselist=False, backref='user')
 
     def __init__(self, username, password):
         self.username = username
@@ -68,3 +71,19 @@ class User(db.Model, UserMixin):
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+
+class Profile(db.Model):
+    __tablename__ = 'profiles'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
+    gender = db.Column(db.String(10))
+    birthday = db.Column(db.Date())
+    phone = db.Column(db.String(20))
+    email = db.Column(db.String(80))
+    location = db.Column(db.String(80))
+    about = db.Column(db.Text())
+    avatar = db.Column(db.String(100))
+    regtime = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))

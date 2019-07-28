@@ -1,6 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, EqualTo, Length, ValidationError
+from flask_wtf.file import FileField, FileAllowed
+from wtforms import StringField, PasswordField, BooleanField, SelectField, \
+    DateField, TextAreaField, SubmitField
+from wtforms.validators import DataRequired, EqualTo, Length, Email, \
+    Optional, ValidationError
 
 from app.user.models import User
 
@@ -26,3 +29,24 @@ class SignupForm(FlaskForm):
         user = User.query.filter_by(username=username.data).first()
         if user is not None:
             raise ValidationError('Username already exists.')
+
+
+class ProfileForm(FlaskForm):
+    name = StringField('Name', validators=[Optional()])
+    gender = SelectField('Gender',
+        choices=[
+            ('', ''),
+            ('Male', 'Male'),
+            ('Female', 'Female'),
+            ('Others', 'Others')
+        ],
+        validators=[Optional()]
+    )
+    birthday = DateField('Birthday', validators=[Optional()])
+    phone = StringField('Phone', validators=[Optional()])
+    email = StringField('Email', validators=[Optional(), Email()])
+    location = StringField('Location', validators=[Optional()])
+    about = TextAreaField('About', validators=[Optional()])
+    avatar = FileField('Avatar',
+        validators=[Optional(), FileAllowed(['jpg', 'png'])])
+    submit = SubmitField('Submit')

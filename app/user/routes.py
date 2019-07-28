@@ -1,10 +1,14 @@
-from flask import render_template, url_for, flash, redirect, abort
+from os.path import splitext, join
+from uuid import uuid4
+
+from flask import render_template, url_for, flash, redirect, abort, \
+    current_app, send_from_directory
 from flask_login import current_user, login_user, logout_user, login_required
 
 from app import db
 from app.user import bp
-from app.user.models import User
-from app.user.forms import LoginForm, SignupForm
+from app.user.models import User, Profile
+from app.user.forms import LoginForm, SignupForm, ProfileForm
 
 
 @bp.route('/login', methods=['GET', 'POST'])
@@ -35,7 +39,9 @@ def signup():
     form = SignupForm()
     if form.validate_on_submit():
         user = User(form.username.data, form.password.data)
+        profile = Profile(user=user)
         db.session.add(user)
+        db.session.add(profile)
         db.session.commit()
         flash('Congratulations! You are now a registered user.')
         return redirect(url_for('user.login'))
@@ -46,7 +52,8 @@ def show_user(id):
     user = User.query.get(id)
     if not user:
         abort(404)
-    return render_template('user/user.html', title=user.username, user=user)
+    return render_template('user/show_user.html',
+        title=user.username, user=user)
 
 @bp.route('/follow/<int:id>')
 @login_required
@@ -75,3 +82,50 @@ def unfollow(id):
         db.session.commit()
         flash('Unfollowed user {}'.format(user.username))
     return redirect(url_for('user.show_user', id=id))
+
+
+@bp.route('/users/<int:id>/profile', methods=['GET'])
+def show_profile(id):
+    user = User.query.get_or_404(id)
+    profile = user.profile
+    return render_template('user/show_profile.html', profile=profile)
+
+@bp.route('/users/<int:id>/profile/edit', methods=['GET', 'POST'])
+@login_required
+def edit_profile(id):
+    user = User.query.get_or_404(id)
+    if current_user != user:
+        abort(403)
+    profile = user.profile
+    form = ProfileForm()
+    if form.validate_on_submit():
+        profile.name = form.name.data or None
+        profile.gender = form.gender.data or None
+        profile.birthday = form.birthday.data or None
+        profile.phone = form.phone.data or None
+        profile.email = form.email.data or None
+        profile.location = form.location.data or None
+        profile.about = form.about.data or None
+        file = form.avatar.data
+        if file:
+            fname = uuid4().hex + splitext(file.filename)[1]
+            # TODO: Preprocess image
+            file.save(join(
+                current_app.config['UPLOAD_FOLDER'], 'avatars', fname))
+            profile.avatar = url_for('user.get_avatar', fname=fname)
+        db.session.commit()
+        flash('Profile updated.')
+        return redirect(url_for('user.show_profile', id=user.id))
+    form.name.data = profile.name or ''
+    form.gender.data = profile.gender or ''
+    form.birthday.data = profile.birthday or ''
+    form.phone.data = profile.phone or ''
+    form.email.data = profile.email or ''
+    form.location.data = profile.location or ''
+    form.about.data = profile.about or ''
+    return render_template('user/edit_profile.html', form=form)
+
+@bp.route('/avatars/<fname>')
+def get_avatar(fname):
+    return send_from_directory(
+        join(current_app.config['UPLOAD_FOLDER'], 'avatars'), fname)
