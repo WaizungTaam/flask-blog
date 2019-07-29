@@ -22,7 +22,10 @@ def login():
             flash('Invalid username or password.')
             return redirect(url_for('user.login'))
         login_user(user, remember=form.remember_me.data)
-        return redirect(url_for('user.show_user', id=user.id))
+        return redirect(
+            request.args.get('next') or \
+            request.referrer or \
+            url_for('user.show_user', id=user.id))
     return render_template('user/login.html', title='Login', form=form)
 
 @bp.route('/logout', methods=['GET'])
