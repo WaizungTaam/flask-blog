@@ -9,5 +9,4 @@ TODO
 - Feed
 - Activities
 - Explore
-- Abstract
 - Votes

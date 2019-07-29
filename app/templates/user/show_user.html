@@ -4,18 +4,16 @@
 {% block app_content %}
   <h1>{{ user.username }}</h1>
 
-  {% if current_user.is_authenticated and user != current_user %}
-    <div>
+  <div>
+    <a href="{{ url_for('user.show_profile', id=user.id) }}" class="btn btn-primary">Profile</a>
+    <a href="{{ url_for('user.show_stars', id=user.id) }}" class="btn btn-primary">Stars</a>
+    {% if current_user.is_authenticated and user != current_user %}
       {% if not current_user.is_following(user) %}
         <a href="{{ url_for('user.follow', id=user.id) }}" class="btn btn-primary">Follow</a>
       {% else %}
         <a href="{{ url_for('user.unfollow', id=user.id) }}" class="btn btn-primary">Unfollow</a>
       {% endif %}
-    </div>
-  {% endif %}
-
-  <div>
-    <a href="{{ url_for('user.show_profile', id=user.id) }}" class="btn btn-info">Profile</a>
+    {% endif %}
   </div>
 
   <div style="margin: 1.5rem 0; padding: 1rem; box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);">

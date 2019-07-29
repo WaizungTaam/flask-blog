@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+  <h1>Stars</h1>
+
+  <div>
+    {% for post in posts %}
+      <div class="card" style="margin: 1.5rem 0; box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);">
+        <div class="card-body" style="padding: 0.5rem 2rem 0.5rem 2rem">
+          <div>
+            <a href="{{ url_for('post.show_post', id=post.id) }}" class="card-link text-body">
+              <h4 class="card-title mb-1">{{ post.title }}</h4>
+            </a>
+          </div>
+          <div>
+            <p class="card-text text-muted">{{ post.abstract }}</p>
+          </div>
+          <div class="text-right">
+            <span style="margin-left: 1.5rem"><a href="{{ url_for('user.show_user', id=post.author.id) }}" class="card-link text-muted">{{ post.author.username }}</a></span>
+            <span style="margin-left: 1.5rem" class="small text-muted">{{ post.mtime }}</span>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <br>
+
+  <nav aria-label="...">
+    <ul class="pager">
+      <li class="previous{% if not prev_url %} disabled{% endif %}">
+        <a{% if prev_url %} href="{{ prev_url }}"{% endif %}>
+          <span aria-hidden="true">&larr;</span> Newer posts
+        </a>
+      </li>
+      <li class="text-muted">
+        Page {{ page }}
+      </li>
+      <li class="next{% if not next_url %} disabled{% endif %}">
+        <a{% if next_url %} href="{{ next_url }}"{% endif %}>
+          Older posts <span aria-hidden="true">&rarr;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+{% endblock %}

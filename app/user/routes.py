@@ -2,7 +2,7 @@ from os.path import splitext, join
 from uuid import uuid4
 
 from flask import render_template, url_for, flash, redirect, abort, \
-    current_app, send_from_directory
+    current_app, send_from_directory, request
 from flask_login import current_user, login_user, logout_user, login_required
 
 from app import db
@@ -129,3 +129,17 @@ def edit_profile(id):
 def get_avatar(fname):
     return send_from_directory(
         join(current_app.config['UPLOAD_FOLDER'], 'avatars'), fname)
+
+@bp.route('/users/<int:id>/stars', methods=['GET'])
+def show_stars(id):
+    user = User.query.get_or_404(id)
+    page = request.args.get('page', 1, type=int)
+    posts = user.stars.paginate(
+        page, current_app.config['POSTS_PER_PAGE'])
+    prev_url = url_for('user.show_stars', page=posts.prev_num) \
+        if posts.has_prev else None
+    next_url = url_for('post.show_stars', page=posts.next_num) \
+        if posts.has_next else None
+    return render_template('/user/show_stars.html',
+        title='Stars', posts=posts.items, page=page,
+        prev_url=prev_url, next_url=next_url)
