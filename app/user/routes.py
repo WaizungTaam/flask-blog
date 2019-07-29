@@ -58,7 +58,7 @@ def show_user(id):
     return render_template('user/show_user.html',
         title=user.username, user=user)
 
-@bp.route('/follow/<int:id>')
+@bp.route('/users/<int:id>/follow')
 @login_required
 def follow(id):
     user = User.query.get(id)
@@ -72,7 +72,7 @@ def follow(id):
         flash('Followed user {}.'.format(user.username))
     return redirect(url_for('user.show_user', id=id))
 
-@bp.route('/unfollow/<int:id>')
+@bp.route('/users/<int:id>/unfollow')
 @login_required
 def unfollow(id):
     user = User.query.get(id)
