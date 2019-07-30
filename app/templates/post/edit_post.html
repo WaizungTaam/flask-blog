@@ -65,6 +65,10 @@
       </div>
     </div>
 
+    <div class="form-group ">
+      <label class="control-label" for="tag">Tag</label>
+      <input class="form-control" id="tag" name="tag" type="text" value="{{ tags }}">
+  </div>
     {{ wtf.form_field(form.submit) }}
   </form>
 {% endblock %}
@@ -80,11 +84,10 @@
   });
 
   $("#edit_post").submit(function (e) {
-    var title = $("#title").val();
-    var content = quill.root.innerHTML;
     $.post("/posts/{{ post.id }}/edit", {
-      title: title,
-      content: content
+      title: $("#title").val(),
+      content: quill.root.innerHTML,
+      tag: $("#tag").val()
     }, function (res) {
         window.location = res.url;
     });

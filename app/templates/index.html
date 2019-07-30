@@ -2,5 +2,6 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block app_content %}
-  <a href="{{ url_for('post.list_posts') }}">List Posts</a>
+  <div><a href="{{ url_for('post.list_posts') }}">List Posts</a></div>
+  <div><a href="{{ url_for('post.list_tags') }}">List Tags</a></div>
 {% endblock %}

@@ -62,6 +62,7 @@
       </div>
     </div>
 
+    {{ wtf.form_field(form.tag) }}
     {{ wtf.form_field(form.recaptcha) }}
     {{ wtf.form_field(form.submit) }}
   </form>
@@ -78,11 +79,10 @@
   });
 
   $("#new_post").submit(function (e) {
-    var title = $("#title").val();
-    var content = quill.root.innerHTML;
     $.post("/posts/new", {
-      title: title,
-      content: content
+      title: $("#title").val(),
+      content: quill.root.innerHTML,
+      tag: $("#tag").val()
     }, function (res) {
       if (res.ok) {
         window.location = res.url;
