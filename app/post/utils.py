@@ -9,7 +9,7 @@ def visible(element):
     return True
 
 def html2text(html, sep=' '):
-    soup = BeautifulSoup(html, 'lxml')
+    soup = BeautifulSoup(html, 'html.parser')
     texts = [t.strip() for t in soup.find_all(text=visible)]
     return sep.join(texts)
 
