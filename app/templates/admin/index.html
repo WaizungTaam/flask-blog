@@ -1,0 +1,218 @@
+{% extends "admin/base.html" %}
+
+{% block app_content %}
+  <h1>Users</h1>
+
+  <div>
+    {% for post in posts %}
+      <div class="card" style="margin: 1.5rem 0; box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);">
+        <div class="card-body" style="padding: 0.5rem 2rem 0.5rem 2rem">
+          <div>
+            <a href="{{ url_for('post.show_post', id=post.id) }}" class="card-link text-body">
+              <h4 class="card-title mb-1">{{ post.title }}</h4>
+            </a>
+          </div>
+          <div>
+            <p class="card-text text-muted">{{ post.abstract }}</p>
+          </div>
+          <div class="text-right">
+            <span style="margin-left: 1.5rem">
+              {% for tag in post.tags %}
+                <a href="{{ url_for('post.show_tag', id=tag.id) }}" class="badge">{{ tag.name }}</a>
+              {% endfor %}
+            </span>
+            <span style="margin-left: 1.5rem"><a href="{{ url_for('user.show_user', id=post.author.id) }}" class="card-link text-muted">{{ post.author.username }}</a></span>
+            <span style="margin-left: 1.5rem" class="small text-muted">{{ post.mtime }}</span>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+    <form id="panel" method="get">
+      <div class="form-group">
+        <input type="text" name="q" class="form-control" value="{{ q }}">
+        <!--
+        <div class="col-xs-9">
+        </div>
+        <div class="col-xs-3">
+        </div>
+        -->
+      </div>
+      <div class="form-group">
+        <button name="action" value="select" type="submit" class="btn btn-info">Select</button>
+        <button name="action" value="insert" type="submit" class="btn btn-primary">Insert</button>
+        <button name="action" value="update" type="submit" class="btn btn-warning">Update</button>
+        <button name="action" value="delete" type="submit" class="btn btn-danger">Delete</button>
+      </div>
+    </form>
+
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">id</th>
+          <th scope="col">username</th>
+          <th scope="col">posts</th>
+          <th scope="col">followings</th>
+          <th scope="col">followers</th>
+          <th scope="col">sent_mails</th>
+          <th scope="col">received_mails</th>
+          <th scope="col">comments</th>
+          <th scope="col">profile</th>
+          <th scope="col">stars</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+          <tr>
+            <th scope="row">{{ user.id }}</th>
+            <td>{{ user.username }}</td>
+            <td>{{ user.posts.count() }}</td>
+            <td>{{ user.followings.count() }}</td>
+            <td>{{ user.followers.count() }}</td>
+            <td>{{ user.sent_mails.count() }}</td>
+            <td>{{ user.received_mails.count() }}</td>
+            <td>{{ user.comments.count() }}</td>
+            <td>{{ user.profile.id }}</td>
+            <td>{{ user.stars.count() }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <br>
+
+  <nav aria-label="...">
+    <ul class="pager">
+      <li class="previous{% if not prev_url %} disabled{% endif %}">
+        <a{% if prev_url %} href="{{ prev_url }}"{% endif %}>
+          <span aria-hidden="true">&larr;</span> Prev
+        </a>
+      </li>
+      <li class="text-muted">
+        Page {{ page }}
+      </li>
+      <li class="next{% if not next_url %} disabled{% endif %}">
+        <a{% if next_url %} href="{{ next_url }}"{% endif %}>
+          Next <span aria-hidden="true">&rarr;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="modal fade" id="insert-modal" tabindex="-1" role="dialog" aria-labelledby="insert-modal-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="insert-modal-label">Confirm Insert</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="get">
+            <div class="form-group required">
+              <label class="control-label" for="username">Username</label>
+              <input class="form-control" name="username" required type="text" value="">
+            </div>
+            <div class="form-group required">
+              <label class="control-label" for="password">Password</label>
+              <input class="form-control" name="password" required type="text" value="">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary">Insert</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="update-modal" tabindex="-1" role="dialog" aria-labelledby="update-modal-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="Update-modal-label">Confirm Update</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Update <strong>users</strong> where <strong class="q"></strong>.
+          <form method="get">
+            <div class="form-group required">
+              <label class="control-label" for="username">Username</label>
+              <input class="form-control" name="username" required type="text" value="">
+            </div>
+            <div class="form-group required">
+              <label class="control-label" for="password">Password</label>
+              <input class="form-control" name="password" required type="text" value="">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="delete-modal-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="delete-modal-label">Confirm Delete</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure to delete from <strong>users</strong> where <strong class="q"></strong>?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+  $("#panel").submit(function (e) {
+    var action = $(document.activeElement).val();
+    switch (action) {
+      case "insert":
+        $('#insert-modal').modal();
+        return false;
+        break;
+      case "update":
+        $('#update-modal .q').html($("#panel input[name=q]").val());
+        $('#update-modal').modal();
+        return false;
+        break;
+      case "delete":
+        $('#delete-modal .q').val($("#panel input[name=q]").val());
+        $('#delete-modal').modal();
+        return false;
+        break;
+    }
+  });
+  $("#insert-modal .btn-primary").click(function (e) {
+    $("#panel").append('<input type="hidden" name=username value="' + $("#insert-modal input[name=username]").val() + '">');
+    $("#panel").append('<input type="hidden" name=password value="' + $("#insert-modal input[name=password]").val() + '">');
+    $("#panel button[value=insert]").click();
+  });
+  $("#update-modal .btn-primary").click(function (e) {
+    $("#panel").append('<input type="hidden" name=username value="' + $("#update-modal input[name=username]").val() + '">');
+    $("#panel").append('<input type="hidden" name=password value="' + $("#update-modal input[name=password]").val() + '">');
+    $("#panel button[value=update]").click();
+  });
+  $("#delete-modal .btn-danger").click(function (e) {
+    $("#panel button[value=delete]").click();
+  });
+  </script>
+{%- endblock scripts %}

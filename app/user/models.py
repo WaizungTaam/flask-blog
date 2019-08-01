@@ -61,13 +61,16 @@ class User(db.Model, UserMixin):
 
     def __init__(self, username, password):
         self.username = username
-        self.password = generate_password_hash(password)
+        self.set_password(password)
 
     def verify(username, password):
         user = User.query.filter_by(username=username).first()
         if user is not None and check_password_hash(user.password, password):
             return user
         return None
+
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
 
     def is_following(self, user):
         return self.followings.filter(

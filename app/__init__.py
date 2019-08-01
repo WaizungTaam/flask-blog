@@ -41,6 +41,9 @@ def create_app(config=Config):
     from app.search import bp as search_bp
     app.register_blueprint(search_bp)
 
+    from app.admin import bp as admin_bp
+    app.register_blueprint(admin_bp)
+
     from app.error import bp as error_bp
     app.register_blueprint(error_bp)
 
