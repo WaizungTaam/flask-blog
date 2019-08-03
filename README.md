@@ -1,7 +1,8 @@
 # Blog
 
+[Visit now](http://148.70.220.176)
+
 TODO
-- Tag
 - Like, Read
 - Collection
 - Recommend
@@ -10,3 +11,6 @@ TODO
 - Activities
 - Explore
 - Votes
+
+FATAL
+- Recaptcha failed on deploy. ERROR for site owner: Invalid domain for site key
