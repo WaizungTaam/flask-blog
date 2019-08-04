@@ -1,3 +1,4 @@
+from flask import session
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, BooleanField, SelectField, \
@@ -6,13 +7,20 @@ from wtforms.validators import DataRequired, EqualTo, Length, Email, \
     Optional, ValidationError
 
 from app.user.models import User
+from app.captcha import CaptchaField
 
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
+    captcha = CaptchaField('Captcha', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Login')
+
+    def validate_captcha(self, captcha):
+        print(captcha.data, session['captcha'])
+        if captcha.data.lower() != session['captcha'].lower():
+            raise ValidationError('Wrong captcha.')
 
 
 class SignupForm(FlaskForm):
@@ -22,6 +30,7 @@ class SignupForm(FlaskForm):
         validators=[DataRequired(), Length(min=6)])
     password2 = PasswordField('Repeat Password',
         validators=[DataRequired(), EqualTo('password')])
+    captcha = CaptchaField('Captcha', validators=[DataRequired()])
     submit = SubmitField('Signup')
 
     def validate_username(self, username):

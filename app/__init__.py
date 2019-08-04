@@ -44,6 +44,9 @@ def create_app(config=Config):
     from app.admin import bp as admin_bp
     app.register_blueprint(admin_bp)
 
+    from app.captcha import bp as captcha_bp
+    app.register_blueprint(captcha_bp)
+
     from app.error import bp as error_bp
     app.register_blueprint(error_bp)
 
