@@ -22,6 +22,8 @@
       </div>
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
+          <li><a href="{{ url_for('post.list_posts') }}">Post</a></li>
+          <li><a href="{{ url_for('post.list_tags') }}">Tag</a></li>
           {% if current_user.is_authenticated %}
             <li><a href="{{ url_for('user.show_user', id=current_user.id) }}">Home</a></li>
           {% endif %}
