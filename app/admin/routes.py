@@ -27,7 +27,7 @@ def login():
             flash('Invalid username or password.')
             return redirect(url_for('admin.login'))
         login_admin(admin)
-        return redirect(request.referrer or url_for('admin.index'))
+        return redirect(url_for('admin.index'))
     return render_template('admin/login.html', title='Login',
         loggedin=False, form=form)
 

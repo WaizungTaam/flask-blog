@@ -11,6 +11,3 @@ TODO
 - Activities
 - Explore
 - Votes
-
-FATAL
-- Recaptcha failed on deploy. ERROR for site owner: Invalid domain for site key
