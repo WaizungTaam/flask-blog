@@ -10,3 +10,8 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     captcha = CaptchaField('Captcha', validators=[DataRequired()])
     submit = SubmitField('Login')
+
+    def validate_captcha(self, captcha):
+        if captcha.data.lower() != session['captcha'].lower():
+            raise ValidationError('Wrong captcha.')
+

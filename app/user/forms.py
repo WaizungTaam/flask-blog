@@ -18,7 +18,6 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
     def validate_captcha(self, captcha):
-        print(captcha.data, session['captcha'])
         if captcha.data.lower() != session['captcha'].lower():
             raise ValidationError('Wrong captcha.')
 
@@ -37,6 +36,10 @@ class SignupForm(FlaskForm):
         user = User.query.filter_by(username=username.data).first()
         if user is not None:
             raise ValidationError('Username already exists.')
+
+    def validate_captcha(self, captcha):
+        if captcha.data.lower() != session['captcha'].lower():
+            raise ValidationError('Wrong captcha.')
 
 
 class ProfileForm(FlaskForm):
