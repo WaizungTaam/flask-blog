@@ -1,7 +1,7 @@
 from flask import session
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, ValidationError
 
 from app.captcha import CaptchaField
 
@@ -15,4 +15,3 @@ class LoginForm(FlaskForm):
     def validate_captcha(self, captcha):
         if captcha.data.lower() != session['captcha'].lower():
             raise ValidationError('Wrong captcha.')
-
