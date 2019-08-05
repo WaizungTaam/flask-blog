@@ -1,0 +1,15 @@
+{% extends "admin/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block app_content %}
+  <h1>Delete Users</h1>
+  <form class="form" method="post" role="form" id="new_post">
+    {{ form.hidden_tag() }}
+    {{ wtf.form_errors(form, hiddens="only") }}
+    {{ wtf.form_field(form.q) }}
+    <input class="btn btn-danger" id="submit" name="submit" type="submit" value="Delete">
+  </form>
+  <br>
+  {% include 'admin/users_table.html' %}
+  {% include 'pagination.html' %}
+{% endblock %}
