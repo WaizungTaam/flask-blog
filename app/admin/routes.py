@@ -19,7 +19,7 @@ def logout_admin():
 @bp.route('/admin/login', methods=['GET', 'POST'])
 def login():
     if admin_logged_in():
-        return redirect(request.referrer or url_for('admin.index'))
+        return redirect(request.args.get('next') or url_for('admin.index'))
     form = LoginForm()
     if form.validate_on_submit():
         admin = Admin.verify(form.username.data, form.password.data)
@@ -27,7 +27,7 @@ def login():
             flash('Invalid username or password.')
             return redirect(url_for('admin.login'))
         login_admin(admin)
-        return redirect(url_for('admin.index'))
+        return redirect(request.args.get('next') or url_for('admin.index'))
     return render_template('admin/login.html', title='Login',
         loggedin=False, form=form)
 

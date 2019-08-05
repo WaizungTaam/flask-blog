@@ -28,7 +28,7 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
           {% if 'admin' not in session %}
-            <li><a href="{{ url_for('admin.login') }}">Login</a></li>
+            <li><a href="{{ url_for('admin.login', next=request.full_path) }}">Login</a></li>
           {% else %}
             <li><a href="{{ url_for('admin.logout') }}">Logout</a></li>
           {% endif %}

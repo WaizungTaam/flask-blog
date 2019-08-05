@@ -22,14 +22,6 @@ def login():
             flash('Invalid username or password.')
             return redirect(url_for('user.login'))
         login_user(user, remember=form.remember_me.data)
-        '''
-        return redirect(
-            request.args.get('next') or \
-            request.referrer or \
-            url_for('user.show_user', id=user.id))
-        '''
-        # TODO: The referrer for POST is itself, which comes from GET.
-        #       A better way to trace history is required.
         return redirect(
             request.args.get('next') or \
             url_for('user.show_user', id=user.id))
@@ -40,7 +32,7 @@ def logout():
     if current_user.is_authenticated:
         logout_user()
         flash('Successfully logout.')
-    return redirect(url_for('user.login'))
+    return redirect(request.referrer or url_for('user.login'))
 
 @bp.route('/signup', methods=['GET', 'POST'])
 def signup():
