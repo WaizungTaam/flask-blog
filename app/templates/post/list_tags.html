@@ -7,13 +7,21 @@
     background-color: #999;
     font-size: 1.5rem;
     padding: 0.75rem 1rem;
-    margin: 1rem 0.2rem;
+    margin: 0 0.4rem 1rem 0;
+  }
+  hr {
+    margin: 0;
   }
   </style>
 {% endblock %}
 
 {% block app_content %}
-  {% for tag in tags %}
-    <a href="{{ url_for('post.show_tag', id=tag.id) }}" class="badge">{{ tag.name }}</a>
+  {% for c, tags in c_tags.items() %}
+    <hr>
+    <h4>{{ c }}</h4>
+    {% for tag in tags %}
+      <a href="{{ url_for('post.show_tag', id=tag.id) }}" class="badge">{{ tag.name }}</a>
+    {% endfor %}
   {% endfor %}
+  <hr>
 {% endblock %}

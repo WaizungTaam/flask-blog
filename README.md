@@ -11,3 +11,4 @@ TODO
 - Activities
 - Explore
 - Votes
+- Markdown editor

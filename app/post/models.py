@@ -15,7 +15,7 @@ class Post(db.Model, SearchableMixin):
     mtime = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     comments = db.relationship('Comment', backref='post', lazy='dynamic',
-        order_by='Comment.time.desc()')
+        order_by='Comment.time.asc()')
     tags = db.relationship(
         'Tag',
         secondary='post_tags',

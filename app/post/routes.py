@@ -126,7 +126,16 @@ def unstar_post(id):
 @bp.route('/tags')
 def list_tags():
     tags = Tag.query.order_by(Tag.name.asc()).all()
-    return render_template('post/list_tags.html', tags=tags)
+    from string import ascii_uppercase, digits
+    c_tags = {c: [] for c in '#-' + ascii_uppercase}
+    for tag in tags:
+        if tag.name[0] in digits:
+            c_tags['#'].append(tag)
+        elif tag.name[0].upper() in ascii_uppercase:
+            c_tags[tag.name[0].upper()].append(tag)
+        else:
+            c_tags['-'].append(tag)
+    return render_template('post/list_tags.html', c_tags=c_tags)
 
 @bp.route('/tags/<int:id>')
 def show_tag(id):

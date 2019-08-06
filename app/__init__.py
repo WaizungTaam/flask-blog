@@ -16,6 +16,10 @@ def create_app(config=Config):
     app = Flask(__name__)
     app.config.from_object(config)
 
+    app.jinja_env.trim_blocks = True
+    app.jinja_env.lstrip_blocks = True
+    app.jinja_env.strip_trailing_newlines = False
+
     db.init_app(app)
     migrate.init_app(app, db)
     login.init_app(app)

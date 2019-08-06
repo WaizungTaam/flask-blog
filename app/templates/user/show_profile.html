@@ -3,15 +3,16 @@
 
 {% block app_content %}
 <div>
-  <table class="table">
-    <tr><td>Name</td><td>{{ profile.name or '' }}</td></tr>
-    <tr><td>Gender</td><td>{{ profile.gender or '' }}</td></tr>
-    <tr><td>Birthday</td><td>{{ profile.birthday or '' }}</td></tr>
-    <tr><td>Phone</td><td>{{ profile.phone or '' }}</td></tr>
-    <tr><td>Email</td><td>{{ profile.email or '' }}</td></tr>
-    <tr><td>Location</td><td>{{ profile.location or '' }}</td></tr>
-    <tr><td>About</td><td>{{ profile.about or '' }}</td></tr>
-    <tr><td>Avatar</td><td>{% if profile.avatar %}<img src="{{ profile.avatar }}">{% endif %}</td></tr>
+  <h1>Profile</h1>
+  <table class="table table-bordered">
+    <tr><th scope="row">Name</th><td>{{ profile.name or '' }}</td></tr>
+    <tr><th scope="row">Gender</th><td>{{ profile.gender or '' }}</td></tr>
+    <tr><th scope="row">Birthday</th><td>{{ profile.birthday or '' }}</td></tr>
+    <tr><th scope="row">Phone</th><td>{{ profile.phone or '' }}</td></tr>
+    <tr><th scope="row">Email</th><td>{{ profile.email or '' }}</td></tr>
+    <tr><th scope="row">Location</th><td>{{ profile.location or '' }}</td></tr>
+    <tr><th scope="row">About</th><td>{{ profile.about or '' }}</td></tr>
+    <tr><th scope="row">Avatar</th><td>{% if profile.avatar %}<img src="{{ profile.avatar }}">{% endif %}</td></tr>
   </table>
 
   {% if current_user.is_authenticated and current_user == profile.user %}
