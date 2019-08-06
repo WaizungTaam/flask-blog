@@ -65,7 +65,7 @@ def users():
 
 def _select_users(users_per_page=20):
     query = text(request.args.get('q', ''))
-    page = request.args.get('p', 1)
+    page = request.args.get('p', 1, type=int)
     users = User.query.filter(query).paginate(page, users_per_page)
     prev_url = url_for('admin.users', a='select', p=users.prev_num) \
         if users.has_prev else None
