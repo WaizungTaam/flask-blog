@@ -125,7 +125,7 @@ def unstar_post(id):
 
 @bp.route('/tags')
 def list_tags():
-    tags = Tag.query.all()
+    tags = Tag.query.order_by(Tag.name.asc()).all()
     return render_template('post/list_tags.html', tags=tags)
 
 @bp.route('/tags/<int:id>')
