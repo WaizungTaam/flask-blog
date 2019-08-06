@@ -22,7 +22,7 @@ def create_app(config=Config):
     bootstrap.init_app(app)
 
     app.elasticsearch = Elasticsearch([app.config['ELASTICSEARCH_URL']]) \
-            if app.config['ELASTICSEARCH_URL'] else None
+        if app.config['ELASTICSEARCH_URL'] else None
 
     @app.route('/')
     def index():

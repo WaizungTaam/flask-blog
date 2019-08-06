@@ -21,8 +21,8 @@ def make_abstract(content):
         return content[:80] + ' ...'
     return content
 
-def parse_tags(s):
-    names = list(set(t.strip() for t in s.split(',')))
+def parse_tags(s, sep=','):
+    names = list(set(t.strip() for t in s.split(sep)))
     names = [t for t in names if t != '']
     tags = []
     for name in names:
