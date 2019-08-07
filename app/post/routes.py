@@ -26,25 +26,20 @@ def list_posts():
 @bp.route('/posts/new', methods=['GET', 'POST'])
 @login_required
 def new_post():
-    if request.method == 'POST':
-        content = request.form.get('content')
-        content_type = request.form.get('content_type') or 'html'
+    form = NewPostForm()
+    if form.validate_on_submit():
         post = Post(
-            title=request.form.get('title'),
-            content=content,
-            content_type=content_type,
-            abstract=make_abstract(content, content_type),
+            title=form.title.data,
+            content=form.content.data,
+            content_type=form.content_type.data,
+            abstract=make_abstract(form.content.data, form.content_type.data),
             author=current_user,
-            tags=parse_tags(request.form.get('tag'))
+            tags=parse_tags(form.tag.data)
         )
         db.session.add(post)
         db.session.commit()
         flash('New post submitted.')
-        return jsonify({
-            'ok': True,
-            'url': url_for('post.show_post', id=post.id)
-        })
-    form = NewPostForm()
+        return redirect(url_for('post.show_post', id=post.id))
     return render_template('post/new_post.html', title='New Post', form=form)
 
 @bp.route('/posts/<int:id>', methods=['GET', 'POST'])
@@ -72,28 +67,18 @@ def show_post(id):
 def edit_post(id):
     post = Post.query.get_or_404(id)
     if current_user != post.author:
-        if request.method == 'GET':
-            abort(403)
-        if request.method == 'POST':
-            return jsonify({
-                'ok': False,
-                'code': 403,
-                'url': url_for('error.forbidden_error')
-            })
+        abort(403)
     form = EditPostForm()
-    if request.method == 'POST':
-        post.title = request.form.get('title')
-        post.content = request.form.get('content')
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.content = form.content.data
         post.abstract = make_abstract(post.content, post.content_type)
         # TODO: Use ref count to remove unused tag.
-        post.tags = parse_tags(request.form.get('tag'))
+        post.tags = parse_tags(form.tag.data)
         post.mtime = datetime.utcnow()
         db.session.commit()
         flash('Post updated.')
-        return jsonify({
-            'ok': True,
-            'url': url_for('post.show_post', id=id)
-        })
+        return redirect(url_for('post.show_post', id=post.id))
     return render_template('post/edit_post.html', title='Edit Post',
         form=form, post=post, tags=', '.join(tag.name for tag in post.tags))
 

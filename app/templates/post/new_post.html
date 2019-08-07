@@ -12,6 +12,8 @@
 
     <div class="form-group">
       <label class="control-label" for="content">Content</label>
+      <input type="hidden" id="content" name="content">
+      <input type="hidden" id="content_type" name="content_type">
 
       <ul class="nav nav-tabs">
         <li class="nav-item active">
@@ -23,56 +25,10 @@
       </ul>
 
       <div class="tab-content">
-
         <div id="wysiwyg-editor" class="tab-pane active" role="tabpanel">
-          <div id="toolbar-container">
-            <span class="ql-formats">
-              <select class="ql-font"></select>
-              <select class="ql-size"></select>
-            </span>
-            <span class="ql-formats">
-              <button class="ql-bold"></button>
-              <button class="ql-italic"></button>
-              <button class="ql-underline"></button>
-              <button class="ql-strike"></button>
-            </span>
-            <span class="ql-formats">
-              <select class="ql-color"></select>
-              <select class="ql-background"></select>
-            </span>
-            <span class="ql-formats">
-              <button class="ql-script" value="sub"></button>
-              <button class="ql-script" value="super"></button>
-            </span>
-            <span class="ql-formats">
-              <button class="ql-header" value="1"></button>
-              <button class="ql-header" value="2"></button>
-              <button class="ql-blockquote"></button>
-              <button class="ql-code-block"></button>
-            </span>
-            <span class="ql-formats">
-              <button class="ql-list" value="ordered"></button>
-              <button class="ql-list" value="bullet"></button>
-              <button class="ql-indent" value="-1"></button>
-              <button class="ql-indent" value="+1"></button>
-            </span>
-            <span class="ql-formats">
-              <button class="ql-direction" value="rtl"></button>
-              <select class="ql-align"></select>
-            </span>
-            <span class="ql-formats">
-              <button class="ql-link"></button>
-              <button class="ql-image"></button>
-              <button class="ql-video"></button>
-              <button class="ql-formula"></button>
-            </span>
-            <span class="ql-formats">
-              <button class="ql-clean"></button>
-            </span>
-          </div>
-          <div class="form-control" id="content" name="content" style="height: 20rem; font-size: 1.5rem;"></div>
+          <div id="ckeditor-toolbar"></div>
+          <div id="ckeditor"></div>
         </div>
-
         <div id="markdown-editor" class="tab-pane" role="tabpanel">
           <textarea id="mde"></textarea>
         </div>
@@ -85,42 +41,49 @@
   </form>
 {% endblock %}
 
+{%- block styles %}
+  {{ super() }}
+  <style>
+    #ckeditor {
+      border: 1px solid var(--ck-color-base-border);
+      border-radius: var(--ck-border-radius);
+      display: flex;
+      flex-flow: column nowrap;
+      min-height: calc(20 * var(--ck-font-size-base));
+      padding-left: calc(var(--ck-font-size-base));
+      padding-right: calc(var(--ck-font-size-base));
+    }
+  </style>
+{%- endblock styles %}
+
 {% block scripts %}
   {{ super() }}
   <script>
-  var quill = new Quill('#content', {
-    theme: 'snow',
-    modules: {
-      toolbar: '#toolbar-container'
-    }
-  });
+  DecoupledEditor
+    .create(document.querySelector('#ckeditor'))
+    .then(editor => {
+      const toolbar = document.querySelector('#ckeditor-toolbar');
+      toolbar.appendChild(editor.ui.view.toolbar.element);
+      window.ckeditor = editor;
+    })
+    .catch(error => {
+      console.error(error);
+    });
 
   var mde = new SimpleMDE({
-    element: $('#mde')[0]
+    element: $('#mde')[0],
+    autoDownloadFontAwesome: false,
+    spellChecker: false
   });
 
   $("#new_post").submit(function (e) {
-    var content = '';
-    var content_type = '';
     if ($('#wysiwyg-editor').hasClass('active')) {
-      content = quill.root.innerHTML;
-      content_type = 'html';
+      $('#content').val(ckeditor.getData());
+      $('#content_type').val('html');
     } else if ($('#markdown-editor').hasClass('active')) {
-      // content = mde.markdown(mde.value());
-      content = mde.value();
-      content_type = 'md';
+      $('#content').val(mde.value());
+      $('#content_type').val('md');
     }
-    $.post("/posts/new", {
-      title: $("#title").val(),
-      content: content,
-      content_type: content_type,
-      tag: $("#tag").val()
-    }, function (res) {
-      if (res.ok) {
-        window.location = res.url;
-      }
-    });
-    return false;
   });
   </script>
 {%- endblock scripts %}

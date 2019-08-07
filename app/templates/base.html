@@ -67,8 +67,9 @@
 
 {%- block styles %}
   {{ super() }}
-  <link rel="stylesheet" href="{{ url_for('static', filename='quill.snow.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='simplemde.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/simplemde.min.css') }}">
   <style>
     body > h1 { margin-top: 0; }
   </style>
@@ -76,6 +77,8 @@
 
 {% block scripts %}
   {{ super() }}
-  <script src="{{ url_for('static', filename='quill.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='simplemde.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/simplemde.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/ckeditor.js') }}"></script>
 {%- endblock scripts %}

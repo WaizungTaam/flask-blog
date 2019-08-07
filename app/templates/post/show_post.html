@@ -10,9 +10,9 @@
     <span style="margin: 0 1rem">{{ post.mtime }}</span>
   </div>
   {% if post.content_type == 'md' %}
-    <div style="font-size: 1.75rem; line-height: 2.75rem; padding: 0;">{{ post.content|markdown }}</div>
+    <div style="font-size: 1.75rem; padding: 0;">{{ post.content|markdown }}</div>
   {% else %}
-    <div class="ql-editor" style="font-size: 1.75rem; line-height: normal; padding: 0; overflow-y: visible;">{{ post.content|safe }}</div>
+    <div style="font-size: 1.75rem; padding: 0;">{{ post.content|safe }}</div>
   {% endif %}
   <br>
   <div class="text-center">
