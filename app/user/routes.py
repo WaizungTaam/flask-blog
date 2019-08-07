@@ -8,7 +8,8 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app import db
 from app.user import bp
 from app.user.models import User, Profile
-from app.user.forms import LoginForm, SignupForm, ProfileForm
+from app.user.forms import LoginForm, SignupForm, ProfileForm, \
+    ChangePasswordForm
 
 
 @bp.route('/login', methods=['GET', 'POST'])
@@ -19,7 +20,7 @@ def login():
     if form.validate_on_submit():
         user = User.verify(form.username.data, form.password.data)
         if not user:
-            flash('Invalid username or password.')
+            flash('Invalid username or password.', 'danger')
             return redirect(url_for('user.login'))
         login_user(user, remember=form.remember_me.data)
         return redirect(
@@ -62,9 +63,9 @@ def show_user(id):
 def follow(id):
     user = User.query.get(id)
     if not user:
-        flash('User not found.')
+        flash('User not found.', 'danger')
     elif user == current_user:
-        flash('Cannot follow yourself.')
+        flash('Cannot follow yourself.', 'danger')
     else:
         current_user.follow(user)
         db.session.commit()
@@ -76,9 +77,9 @@ def follow(id):
 def unfollow(id):
     user = User.query.get(id)
     if not user:
-        flash('User not found.')
+        flash('User not found.', 'danger')
     elif user == current_user:
-        flash('Cannot unfollow yourself.')
+        flash('Cannot unfollow yourself.', 'danger')
     else:
         current_user.unfollow(user)
         db.session.commit()
@@ -145,3 +146,17 @@ def show_stars(id):
     return render_template('/user/show_stars.html',
         title='Stars', posts=posts.items, page=page,
         prev_url=prev_url, next_url=next_url)
+
+@bp.route('/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        if current_user.verify_password(form.old_password.data):
+            current_user.set_password(form.new_password.data)
+            db.session.commit()
+            flash('Password updated.')
+        else:
+            flash('Incorrect old password.', 'danger')
+        return redirect(url_for('user.settings'))
+    return render_template('user/settings.html', form=form)

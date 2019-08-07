@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block app_content %}
+  <h1>Settings</h1>
+  <hr>
+    <h3>Change Password</h3>
+    {{ wtf.quick_form(form) }}
+  <hr>
+{% endblock %}

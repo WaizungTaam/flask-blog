@@ -77,6 +77,9 @@ class User(db.Model, UserMixin):
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
+    def verify_password(self, password):
+        return check_password_hash(self.password, password)
+
     def is_following(self, user):
         return self.followings.filter(
             followers.c.following_id == user.id).count() > 0

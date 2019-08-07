@@ -22,6 +22,9 @@
             <a href="{{ url_for('user.unfollow', id=user.id) }}" class="btn btn-primary" style="margin-right: 0.5rem;">Unfollow</a>
           {% endif %}
         {% endif %}
+        {% if current_user.is_authenticated and user == current_user %}
+          <a href="{{ url_for('user.settings') }}" class="btn btn-primary" style="margin-right: 0.5rem">Settings</a>
+        {% endif %}
       </td>
     </tr>
   </table>

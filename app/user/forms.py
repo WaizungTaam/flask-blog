@@ -27,7 +27,7 @@ class SignupForm(FlaskForm):
         validators=[DataRequired(), Length(min=1, max=50)])
     password = PasswordField('Password',
         validators=[DataRequired(), Length(min=6)])
-    password2 = PasswordField('Repeat Password',
+    password2 = PasswordField('Confirm Password',
         validators=[DataRequired(), EqualTo('password')])
     captcha = CaptchaField('Captcha', validators=[DataRequired()])
     submit = SubmitField('Signup')
@@ -61,3 +61,12 @@ class ProfileForm(FlaskForm):
     avatar = FileField('Avatar',
         validators=[Optional(), FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Submit')
+
+class ChangePasswordForm(FlaskForm):
+    old_password = PasswordField('Old Password', validators=[DataRequired()])
+    new_password = PasswordField('New Password',
+        validators=[DataRequired(), Length(min=6)])
+    new_password2 = PasswordField('Confirm New Password',
+        validators=[DataRequired(), EqualTo('new_password',
+            'Must be equal to New Password.')])
+    sumit = SubmitField('Update')

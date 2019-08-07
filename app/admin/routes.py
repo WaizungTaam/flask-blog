@@ -27,7 +27,7 @@ def login():
     if form.validate_on_submit():
         admin = Admin.verify(form.username.data, form.password.data)
         if not admin:
-            flash('Invalid username or password.')
+            flash('Invalid username or password.', 'danger')
             return redirect(url_for('admin.login'))
         login_admin(admin)
         return redirect(request.args.get('next') or url_for('admin.index'))
