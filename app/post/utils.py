@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup, Comment
-from app import db
+from app import db, markdown
 from app.post.models import Tag
 
 def visible(element):
@@ -15,7 +15,9 @@ def html2text(html, sep=' '):
     texts = [t.strip() for t in soup.find_all(text=visible)]
     return sep.join(texts)
 
-def make_abstract(content):
+def make_abstract(content, content_type='html'):
+    if content_type == 'md':
+        content = markdown.convert(content)
     content = html2text(content, ' ')
     if len(content) > 80:
         return content[:80] + ' ...'

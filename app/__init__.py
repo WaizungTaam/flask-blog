@@ -4,6 +4,8 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from elasticsearch import Elasticsearch
+from jinja2 import Markup
+from markdown import Markdown
 from config import Config
 
 db = SQLAlchemy()
@@ -11,6 +13,7 @@ migrate = Migrate()
 login = LoginManager()
 login.login_view = 'user.login'
 bootstrap = Bootstrap()
+markdown = Markdown()
 
 def create_app(config=Config):
     app = Flask(__name__)
@@ -19,6 +22,8 @@ def create_app(config=Config):
     app.jinja_env.trim_blocks = True
     app.jinja_env.lstrip_blocks = True
     app.jinja_env.strip_trailing_newlines = False
+
+    app.jinja_env.filters['markdown'] = lambda t: Markup(markdown.convert(t))
 
     db.init_app(app)
     migrate.init_app(app, db)

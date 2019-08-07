@@ -68,12 +68,14 @@
 {%- block styles %}
   {{ super() }}
   <link rel="stylesheet" href="{{ url_for('static', filename='quill.snow.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='simplemde.min.css') }}">
   <style>
-    h1 { margin-top: 0; }
+    body > h1 { margin-top: 0; }
   </style>
 {%- endblock styles %}
 
 {% block scripts %}
   {{ super() }}
   <script src="{{ url_for('static', filename='quill.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='simplemde.min.js') }}"></script>
 {%- endblock scripts %}

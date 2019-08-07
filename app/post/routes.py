@@ -27,10 +27,13 @@ def list_posts():
 @login_required
 def new_post():
     if request.method == 'POST':
+        content = request.form.get('content')
+        content_type = request.form.get('content_type') or 'html'
         post = Post(
             title=request.form.get('title'),
-            content=request.form.get('content'),
-            abstract=make_abstract(request.form.get('content')),
+            content=content,
+            content_type=content_type,
+            abstract=make_abstract(content, content_type),
             author=current_user,
             tags=parse_tags(request.form.get('tag'))
         )
@@ -81,7 +84,7 @@ def edit_post(id):
     if request.method == 'POST':
         post.title = request.form.get('title')
         post.content = request.form.get('content')
-        post.abstract = make_abstract(request.form.get('content'))
+        post.abstract = make_abstract(post.content, post.content_type)
         # TODO: Use ref count to remove unused tag.
         post.tags = parse_tags(request.form.get('tag'))
         post.mtime = datetime.utcnow()

@@ -55,13 +55,15 @@ def seed_posts(count):
         title = capwords(fake.sentence()[:-1])
         content = fake.text(max_nb_chars=2000)
         content = '<p>' + content.replace('\n', '</p><p>') + '</p>'
+        content_type = 'html'
         tags = title.lower().split(' ')
         tags = ' '.join(sample(tags, min(len(tags), randint(1, 5))))
         time = fake.past_datetime()
         post = Post(
             title=title,
             content=content,
-            abstract=make_abstract(content),
+            content_type=content_type,
+            abstract=make_abstract(content, content_type),
             author=User.query.order_by(func.rand()).first(),
             tags=parse_tags(tags, ' '),
             ctime=time,
