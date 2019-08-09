@@ -1,0 +1,20 @@
+{% extends "admin/base.html" %}
+
+{% block app_content %}
+
+  <h1>{{ title }}</h1>
+
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <tbody>
+        {% for key, value in rows %}
+          <tr>
+            <th scope="row">{{ key }}</th>
+            <td>{{ value }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+{% endblock %}

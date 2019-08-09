@@ -1,0 +1,55 @@
+{% extends "admin/base.html" %}
+
+{%- block styles %}
+  {{ super() }}
+  <style>
+    .table > thead > tr > th,
+    .table > tbody > tr > td,
+    .table > tbody > tr > th {
+      vertical-align: middle;
+      text-align: center;
+    }
+    .btn-info, .btn-warning, .btn-danger {
+      padding: 0.25rem 0.5rem;
+      margin: 0 0.5rem;
+    }
+  </style>
+{%- endblock styles %}
+
+{% block app_content %}
+
+  <h1>{{ title }}</h1>
+
+  <a href="{{ url_for(insert_endpoint) }}" class="btn btn-primary" style="margin-bottom: 1rem;">Insert</a>
+
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          {% for key in keys %}
+            <th scope="col">{{ key }}</th>
+          {% endfor %}
+          <th scope="col">action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for id, values in rows %}
+          <tr>
+            {% for value in values %}
+              <td>{{ value|truncate(10, True, '...', 0) }}</td>
+            {% endfor %}
+            <td>
+              <a href="{{ url_for(show_endpoint, id=id) }}" class="btn btn-info">Show</a>
+              <a href="{{ url_for(update_endpoint, id=id) }}" class="btn btn-warning">Update</a>
+              <a href="{{ url_for(delete_endpoint, id=id) }}" class="btn btn-danger">Delete</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <br>
+
+  {% include 'pagination.html' %}
+
+{% endblock %}

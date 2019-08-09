@@ -22,7 +22,10 @@ def seed_users(count):
     from app.user.models import User, Profile
     for _ in range(count):
         while True:
-            user = User(fake.user_name(), '123456')
+            user = User(
+                username=fake.user_name(),
+                password=User.make_password('123456')
+            )
             profile = Profile(
                 user=user,
                 name=fake.name(),

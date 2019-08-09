@@ -41,7 +41,10 @@ def signup():
         return redirect(url_for('user.show_user', id=current_user.id))
     form = SignupForm()
     if form.validate_on_submit():
-        user = User(form.username.data, form.password.data)
+        user = User(
+            username=form.username.data,
+            password=User.make_password(form.password.data)
+        )
         profile = Profile(user=user)
         db.session.add(user)
         db.session.add(profile)

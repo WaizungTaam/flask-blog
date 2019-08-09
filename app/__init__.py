@@ -51,7 +51,7 @@ def create_app(config=Config):
     app.register_blueprint(search_bp)
 
     from app.admin import bp as admin_bp
-    app.register_blueprint(admin_bp)
+    app.register_blueprint(admin_bp, url_prefix='/admin')
 
     from app.captcha import bp as captcha_bp
     app.register_blueprint(captcha_bp)

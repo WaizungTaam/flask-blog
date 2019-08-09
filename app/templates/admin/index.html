@@ -1,23 +1,10 @@
 {% extends "admin/base.html" %}
 
 {% block app_content %}
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th scope="col">Table</th>
-        <th scope="col">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>users</td>
-        <td>
-          <a href="{{ url_for('admin.users', a='select') }}" class="btn btn-info">Select</a>
-          <a href="{{ url_for('admin.users', a='insert') }}" class="btn btn-primary">Insert</a>
-          <a href="{{ url_for('admin.users', a='update') }}" class="btn btn-warning">Update</a>
-          <a href="{{ url_for('admin.users', a='delete') }}" class="btn btn-danger">Delete</a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <a href="{{ url_for('admin.list_users') }}" class="btn btn-primary">users</a>
+  <a href="{{ url_for('admin.list_profiles') }}" class="btn btn-primary">profiles</a>
+  <a href="{{ url_for('admin.list_mails') }}" class="btn btn-primary">mails</a>
+  <a href="{{ url_for('admin.list_posts') }}" class="btn btn-primary">posts</a>
+  <a href="{{ url_for('admin.list_comments') }}" class="btn btn-primary">comments</a>
+  <a href="{{ url_for('admin.list_tags') }}" class="btn btn-primary">tags</a>
 {% endblock %}

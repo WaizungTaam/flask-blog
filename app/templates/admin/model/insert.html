@@ -2,9 +2,5 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block app_content %}
-  <h1>Insert User</h1>
   {{ wtf.quick_form(form) }}
-  <br>
-  {% include 'admin/users_table.html' %}
-  {% include 'pagination.html' %}
 {% endblock %}
