@@ -26,9 +26,9 @@
     <br><br>
     <div class="text-center">
         {% if not current_user.has_starred(post) %}
-          <a class="btn btn-info" style="margin: 0 0.5rem" href="{{ url_for('post.star_post', id=post.id) }}">Star</a>
+          <a class="btn btn-info" style="margin: 0 0.5rem" href="{{ url_for('post.star_post', id=post.id) }}">Star<span class="badge" style="padding: 0.2rem 0.4rem; margin-left: 0.5rem;">{{ post.stars.count() }}</span></a>
         {% else %}
-          <a class="btn btn-info" style="margin: 0 0.5rem" href="{{ url_for('post.unstar_post', id=post.id) }}">Unstar</a>
+          <a class="btn btn-info" style="margin: 0 0.5rem" href="{{ url_for('post.unstar_post', id=post.id) }}">Unstar<span class="badge" style="padding: 0.2rem 0.4rem; margin-left: 0.5rem;">{{ post.stars.count() }}</span></a>
         {% endif %}
       {% if current_user == post.author %}
         <a class="btn btn-warning" style="margin: 0 0.5rem" href="{{ url_for('post.edit_post', id=post.id) }}">Edit</a>
