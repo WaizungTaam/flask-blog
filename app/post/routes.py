@@ -45,6 +45,9 @@ def new_post():
 @bp.route('/posts/<int:id>', methods=['GET', 'POST'])
 def show_post(id):
     post = Post.query.get_or_404(id)
+    if request.method == 'GET':
+        post.read += 1
+        db.session.commit()
     if not current_user.is_authenticated:
         return render_template('post/show_post.html',
             title=post.title, post=post)

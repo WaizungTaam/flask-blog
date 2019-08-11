@@ -25,6 +25,7 @@ class Post(db.Model, SearchableMixin):
         backref=db.backref('posts', lazy='dynamic'),
         lazy='dynamic'
     )
+    read = db.Column(db.Integer, index=True, default=0)
 
 
 class Comment(db.Model):

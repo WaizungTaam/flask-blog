@@ -8,6 +8,7 @@
   <div class="text-center" style="margin: 1.5rem 0">
     <span style="margin: 0 1rem"><a href="{{ url_for('user.show_user', id=post.author.id) }}">{{ post.author.username }}</a></span>
     <span style="margin: 0 1rem">{{ post.mtime }}</span>
+    <span style="margin: 0 1rem">{{ post.read }} read</span>
   </div>
   {% if post.content_type == 'md' %}
     <div style="font-size: 1.75rem; padding: 0;">{{ post.content|markdown }}</div>
