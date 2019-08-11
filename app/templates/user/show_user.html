@@ -8,7 +8,7 @@
         <img src="{{ user.profile.avatar }}" style="margin-right: 2rem;">
       </td>
       <td>
-        <h1 style="margin-top: 0;">{{ user.username }}</h1>
+        <h1 style="margin-top: 0;">{{ user.username }}{% if user.type == 'official' %}<span class="badge" style="margin: 0 1rem; color: #fff; background-color: #5cb85c; border-color: #4cae4c;">Official</span>{% endif %}</h1>
       </td>
     </tr>
     <tr>

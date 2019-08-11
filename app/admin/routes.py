@@ -4,7 +4,7 @@ from flask import request, render_template, session, redirect, url_for, flash
 
 from app.admin import bp
 from app.admin.models import Admin
-from app.admin.forms import LoginForm
+from app.admin.forms import LoginForm, SendMailForm
 from app import db
 
 
@@ -47,11 +47,25 @@ def logout():
         flash('Successfully logout.')
     return redirect(request.referrer or url_for('admin.login'))
 
-@bp.route('/', methods=['GET'])
+@bp.route('/', methods=['GET', 'POST'])
 def index():
     if not admin_logged_in():
         return redirect(url_for('admin.login'))
-    return render_template('admin/index.html')
+    form = SendMailForm()
+    form.load_senders()
+    if form.validate_on_submit():
+        mail = Mail(
+            title=form.title.data,
+            content=form.content.data,
+            read=False,
+            sender=User.query.get(form.sender.data),
+            receiver=User.query.filter_by(username=form.receiver.data).first()
+        )
+        db.session.add(mail)
+        db.session.commit()
+        flash('Mail sent.')
+        return redirect(url_for('admin.index'))
+    return render_template('admin/index.html', form=form)
 
 
 from wtforms import Field

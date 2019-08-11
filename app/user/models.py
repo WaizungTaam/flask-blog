@@ -25,6 +25,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     password = db.Column(db.String(128))
+    type = db.Column(db.String(16), default='people')
     posts = db.relationship(
         'Post',
         backref='author',
@@ -73,6 +74,9 @@ class User(db.Model, UserMixin):
     def make_password(password):
         return generate_password_hash(password)
 
+    def official_users():
+        return User.query.filter_by(type='official').all()
+
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
@@ -120,6 +124,6 @@ class Profile(db.Model):
     email = db.Column(db.String(80))
     location = db.Column(db.String(80))
     about = db.Column(db.Text())
-    avatar = db.Column(db.String(100))
+    avatar = db.Column(db.String(100), default='/avatars/default-avatar.png')
     regtime = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))

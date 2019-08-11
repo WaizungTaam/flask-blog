@@ -7,6 +7,7 @@ from wtforms.validators import DataRequired, EqualTo, Length, Email, \
     Optional, ValidationError
 
 from app.user.models import User
+from app.mail.models import Mail
 from app.captcha import CaptchaField
 
 

@@ -1,10 +1,20 @@
 {% extends "admin/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block app_content %}
-  <a href="{{ url_for('admin.list_users') }}" class="btn btn-primary">users</a>
-  <a href="{{ url_for('admin.list_profiles') }}" class="btn btn-primary">profiles</a>
-  <a href="{{ url_for('admin.list_mails') }}" class="btn btn-primary">mails</a>
-  <a href="{{ url_for('admin.list_posts') }}" class="btn btn-primary">posts</a>
-  <a href="{{ url_for('admin.list_comments') }}" class="btn btn-primary">comments</a>
-  <a href="{{ url_for('admin.list_tags') }}" class="btn btn-primary">tags</a>
+  <hr>
+  <div>
+    <h3>Model</h3>
+    <a href="{{ url_for('admin.list_users') }}" class="btn btn-primary">users</a>
+    <a href="{{ url_for('admin.list_profiles') }}" class="btn btn-primary">profiles</a>
+    <a href="{{ url_for('admin.list_mails') }}" class="btn btn-primary">mails</a>
+    <a href="{{ url_for('admin.list_posts') }}" class="btn btn-primary">posts</a>
+    <a href="{{ url_for('admin.list_comments') }}" class="btn btn-primary">comments</a>
+    <a href="{{ url_for('admin.list_tags') }}" class="btn btn-primary">tags</a>
+  </div>
+  <hr>
+  <div>
+    <h3>Mail</h3>
+    {{ wtf.quick_form(form) }}
+  </div>
 {% endblock %}
