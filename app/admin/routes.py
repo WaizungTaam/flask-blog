@@ -164,7 +164,7 @@ class ModelView:
             flash('Inserted {}.'.format(item))
             return redirect(url_for(self.show_endpoint, id=item.id))
         return render_template('admin/model/insert.html',
-            title='Insert ' + self._cap(self.name), form=form)
+            title='Insert ' + self._cap(self.name[:-1]), form=form)
 
     @admin_login_required
     def show(self, id):

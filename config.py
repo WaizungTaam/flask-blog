@@ -1,9 +1,11 @@
 import os
 from dotenv import load_dotenv
 
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 load_dotenv()
+
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'test'
@@ -25,3 +27,7 @@ class Config:
     RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY')
 
     BOOTSTRAP_SERVE_LOCAL = True
+
+
+class TestConfig(Config):
+    SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URI')

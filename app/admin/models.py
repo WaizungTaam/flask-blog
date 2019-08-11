@@ -10,6 +10,7 @@ class Admin(db.Model):
     username = db.Column(db.String(128), index=True, unique=True)
     password = db.Column(db.String(512))
 
+    # TODO: Defining a __init__ may cause problem. See user.User
     def __init__(self, username, password):
         self.username = username
         self.password = generate_password_hash(password)
