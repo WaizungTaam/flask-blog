@@ -76,8 +76,11 @@ def edit_post(id):
         post.title = form.title.data
         post.content = form.content.data
         post.abstract = make_abstract(post.content, post.content_type)
-        # TODO: Use ref count to remove unused tag.
+        old_tags = list(post.tags)
         post.tags = parse_tags(form.tag.data)
+        for tag in set(old_tags) - set(post.tags):
+            if tag.posts.count() == 0:
+                db.session.delete(tag)
         post.mtime = datetime.utcnow()
         db.session.commit()
         flash('Post updated.')
@@ -91,7 +94,11 @@ def delete_post(id):
     post = Post.query.get_or_404(id)
     if current_user != post.author:
         abort(403)
+    tags = list(post.tags)
     db.session.delete(post)
+    for tag in tags:
+        if tag.posts.count() == 0:
+            db.session.delete(tag)
     db.session.commit()
     flash('Post deleted.')
     return redirect(url_for('user.show_user', id=current_user.id))
