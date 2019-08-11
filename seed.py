@@ -70,7 +70,8 @@ def seed_posts(count):
             author=User.query.order_by(func.rand()).first(),
             tags=parse_tags(tags, ' '),
             ctime=time,
-            mtime=time
+            mtime=time,
+            read=randint(0, 10000)
         )
         db.session.add(post)
         for _ in range(randint(0, 10)):
