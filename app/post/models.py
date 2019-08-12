@@ -37,8 +37,8 @@ class Post(db.Model, SearchableMixin):
     )
 
     def set_related(self):
-        from app.recommend import set_related_posts
-        set_related_posts(self)
+        from app.recommend import build_tfidf
+        build_tfidf()
 
 
 class Comment(db.Model):
