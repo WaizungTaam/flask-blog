@@ -65,6 +65,8 @@ def build_tfidf(limit=10):
     db.session.query(RelatedPost).delete()
     tfidf = TfidfVectorizer(stop_words='english')
     posts, docs = zip(*[(p.id, _make_doc(p)) for p in Post.query.all()])
+    # TODO: _make_doc is the most time-costing part.
+    #       Consider replace `abstract` with `text` in Post.
     matrix = tfidf.fit_transform(docs)
     scores = linear_kernel(matrix, matrix)
     objs = []
