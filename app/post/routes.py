@@ -36,6 +36,7 @@ def new_post():
             author=current_user,
             tags=parse_tags(form.tag.data)
         )
+        post.set_related()
         db.session.add(post)
         db.session.commit()
         flash('New post submitted.')
@@ -82,6 +83,7 @@ def edit_post(id):
             if tag.posts.count() == 0:
                 db.session.delete(tag)
         post.mtime = datetime.utcnow()
+        post.set_related()
         db.session.commit()
         flash('Post updated.')
         return redirect(url_for('post.show_post', id=post.id))

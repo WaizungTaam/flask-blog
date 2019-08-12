@@ -73,6 +73,7 @@ def seed_posts(count):
             mtime=time,
             read=randint(0, 10000)
         )
+        post.set_related()
         db.session.add(post)
         for _ in range(randint(0, 10)):
             comment = Comment(

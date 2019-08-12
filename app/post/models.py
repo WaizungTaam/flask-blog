@@ -1,6 +1,7 @@
 from datetime import datetime
 from app import db
 from app.search.models import SearchableMixin
+from app.recommend.models import RelatedPost
 
 
 class Post(db.Model, SearchableMixin):
@@ -26,6 +27,18 @@ class Post(db.Model, SearchableMixin):
         lazy='dynamic'
     )
     read = db.Column(db.Integer, index=True, default=0)
+    related = db.relationship(
+        'Post',
+        secondary='related_posts',
+        primaryjoin='Post.id == related_posts.c.target',
+        secondaryjoin='related_posts.c.related == Post.id',
+        lazy='dynamic',
+        order_by='related_posts.c.score.desc()'
+    )
+
+    def set_related(self):
+        from app.recommend import set_related_posts
+        set_related_posts(self)
 
 
 class Comment(db.Model):
