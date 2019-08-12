@@ -49,7 +49,7 @@ def seed_users(count):
 
 def seed_posts(count):
     from app.post.models import Post, Comment
-    from app.post.utils import make_abstract, parse_tags
+    from app.post.utils import make_content_text, parse_tags
     from app.user.models import User
     if User.query.count() == 0:
         print('Users required.')
@@ -66,12 +66,12 @@ def seed_posts(count):
             title=title,
             content=content,
             content_type=content_type,
-            abstract=make_abstract(content, content_type),
+            content_text=make_content_text(content, content_type),
             author=User.query.order_by(func.rand()).first(),
             tags=parse_tags(tags, ' '),
             ctime=time,
             mtime=time,
-            read=randint(0, 10000)
+            read=randint(0, 1000)
         )
         post.set_related()
         db.session.add(post)

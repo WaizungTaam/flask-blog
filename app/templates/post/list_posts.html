@@ -13,7 +13,7 @@
             </a>
           </div>
           <div>
-            <p class="card-text text-muted">{{ post.abstract }}</p>
+            <p class="card-text text-muted">{{ post.content_text|truncate(80, True, '...', 0) }}</p>
           </div>
           <div class="text-right">
             <span style="margin-left: 1.5rem">

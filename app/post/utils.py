@@ -15,13 +15,10 @@ def html2text(html, sep=' '):
     texts = [t.strip() for t in soup.find_all(text=visible)]
     return sep.join(texts)
 
-def make_abstract(content, content_type='html'):
-    if content_type == 'md':
-        content = markdown.convert(content)
-    content = html2text(content, ' ')
-    if len(content) > 80:
-        return content[:80] + ' ...'
-    return content
+def make_content_text(content, conttent_type='html'):
+    if conttent_type == 'md':
+        content = markdown.content(content)
+    return html2text(content, ' ')
 
 def parse_tags(s, sep=','):
     names = list(set(t.strip() for t in s.split(sep)))

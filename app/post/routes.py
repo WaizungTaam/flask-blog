@@ -8,7 +8,7 @@ from app import db
 from app.post import bp
 from app.post.models import Post, Comment, Tag
 from app.post.forms import NewPostForm, EditPostForm, CommentForm
-from app.post.utils import make_abstract, parse_tags
+from app.post.utils import make_content_text, parse_tags
 
 
 @bp.route('/posts', methods=['GET'])
@@ -32,7 +32,8 @@ def new_post():
             title=form.title.data,
             content=form.content.data,
             content_type=form.content_type.data,
-            abstract=make_abstract(form.content.data, form.content_type.data),
+            content_text=make_content_text(
+                form.content.data, form.content_type.data),
             author=current_user,
             tags=parse_tags(form.tag.data)
         )
@@ -76,7 +77,7 @@ def edit_post(id):
     if form.validate_on_submit():
         post.title = form.title.data
         post.content = form.content.data
-        post.abstract = make_abstract(post.content, post.content_type)
+        post.content_text = make_content_text(post.content, post.content_type)
         old_tags = list(post.tags)
         post.tags = parse_tags(form.tag.data)
         for tag in set(old_tags) - set(post.tags):

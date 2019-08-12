@@ -12,7 +12,7 @@ class Post(db.Model, SearchableMixin):
     title = db.Column(db.String(140))
     content = db.Column(db.Text())
     content_type = db.Column(db.String(10))
-    abstract = db.Column(db.String(100))
+    content_text = db.Column(db.Text())
     ctime = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     mtime = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
