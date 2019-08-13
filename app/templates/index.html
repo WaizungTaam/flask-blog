@@ -2,11 +2,44 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block app_content %}
-<div class="jumbotron jumbotron-fluid">
-  <h1 class="display-4">Hello, world!</h1>
-  <hr class="my-4">
-  <p>Welcome to Blog.</p>
-  <p>A community for Developers and IT Professionals.</p>
-  <div><a class="btn btn-primary btn-lg" href="#" role="button">Learn More</a></div>
-</div>
+  {% if not current_user.is_authenticated %}
+    <div class="jumbotron jumbotron-fluid">
+      <h1 class="display-4">Hello, world!</h1>
+      <hr class="my-4">
+      <p>Welcome to Blog.</p>
+      <p>A community for Developers and IT Professionals.</p>
+      <div><a class="btn btn-primary btn-lg" href="#" role="button">Learn More</a></div>
+    </div>
+  {% else %}
+    <div>
+      <h2>Feed</h2>
+      {% for u, time, type, obj in current_user.feed() %}
+        <div style="margin: 0.5rem 0; padding: 1rem; box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);" class="feed-item" hidden>
+          {% if type == 'post' %}
+            <div><span class="badge" style="background-color: #337ab7;">{{ time }}</span> <a href="{{ url_for('user.show_user', id=u.id) }}">{{ u.username }}</a> new post</div>
+            <div><a href="{{ url_for('post.show_post', id=obj.id) }}">{{ obj.title }}</a></div>
+            <div class="text-muted">{{ obj.content_text|truncate(80, True, '...', 0) }}</div>
+          {% elif type == 'comment' %}
+            <div><span class="badge">{{ time }}</span> <a href="{{ url_for('user.show_user', id=u.id) }}">{{ u.username }}</a> comment on <a href="{{ url_for('post.show_post', id=obj.post.id) + '#comment-{}'.format(obj.id) }}">{{ obj.post.title }}</a></div>
+            <div class="text-muted">{{ obj.content|truncate(80, True, '...', 0) }}</div>
+          {% endif %}
+        </div>
+      {% endfor %}
+      <br>
+      <button id="more" class="btn btn-default btn-block">More</button>
+    </div>
+  {% endif %}
 {% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+  $('.feed-item').slice(0, 10).show();
+  $('#more').click(function (e) {
+    $('.feed-item:hidden').slice(0, 10).show();
+    if ($('.feed-item:hidden').length == 0) {
+      $('#more').hide();
+    }
+  });
+  </script>
+{%- endblock scripts %}

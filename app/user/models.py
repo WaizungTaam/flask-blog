@@ -107,6 +107,17 @@ class User(db.Model, UserMixin):
         if self.has_starred(post):
             self.stars.remove(post)
 
+    def activities(self):
+        posts = [(p.ctime, 'post', p) for p in self.posts]
+        comments = [(c.time, 'comment', c) for c in self.comments]
+        return sorted(posts + comments, key=lambda t: t[0], reverse=True)
+
+    def feed(self):
+        return sorted([(u, t, y, o) \
+            for u in self.followings \
+            for t, y, o in u.activities()],
+            key=lambda t: t[1], reverse=True)
+
 
 @login.user_loader
 def load_user(id):

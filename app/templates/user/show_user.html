@@ -75,4 +75,20 @@
       </ul>
     {% endif %}
   </div>
+
+  <div style="margin: 1.5rem 0; padding: 1rem; box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);">
+    Activities
+    {% for time, type, obj in user.activities() %}
+      <div style="margin: 0.5rem 0; padding: 1rem; box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);">
+        {% if type == 'post' %}
+          <div><span class="badge" style="background-color: #337ab7;">{{ time }}</span> New post</div>
+          <div><a href="{{ url_for('post.show_post', id=obj.id) }}">{{ obj.title }}</a></div>
+          <div class="text-muted">{{ obj.content_text|truncate(80, True, '...', 0) }}</div>
+        {% elif type == 'comment' %}
+          <div><span class="badge">{{ time }}</span> Comment on <a href="{{ url_for('post.show_post', id=obj.post.id) + '#comment-{}'.format(obj.id) }}">{{ obj.post.title }}</a></div>
+          <div class="text-muted">{{ obj.content|truncate(80, True, '...', 0) }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
 {% endblock %}

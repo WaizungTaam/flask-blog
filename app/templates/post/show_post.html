@@ -53,13 +53,13 @@
   {% endif %}
   <div>{{ post.comments.count() }} comments</div>
   {% for comment in post.comments %}
-    <div class="card" id="comment-{{ loop.index0 + 1 }}" style="margin: 1rem 0; box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);">
+    <div class="card" id="comment-{{ comment.id }}" style="margin: 1rem 0; box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);">
       <div class="card-body" style="padding: 0.5rem 1rem 0.25rem 1rem">
         <div class="card-title mb-1">{{ comment.content }}</div>
         <div class="text-right">
           <span style="margin-left: 1.5rem"><a href="{{ url_for('user.show_user', id=comment.author.id) }}" class="card-link text-muted">{{ comment.author.username }}</a></span>
           <span style="margin-left: 1.5rem" class="small text-muted">{{ comment.time }}</span>
-          <span style="margin-left: 1.5rem"><a class="small text-muted" href="#comment-{{ loop.index0 + 1 }}">#{{ loop.index0 + 1 }}</a></span>
+          <span style="margin-left: 1.5rem"><a class="small text-muted" href="#comment-{{ comment.id }}">#{{ loop.index0 + 1 }}</a></span>
         </div>
       </div>
     </div>
