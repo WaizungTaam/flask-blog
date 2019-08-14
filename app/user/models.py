@@ -88,11 +88,11 @@ class User(db.Model, UserMixin):
             followers.c.following_id == user.id).count() > 0
 
     def follow(self, user):
-        if not self.is_following(user):
+        if user != self and not self.is_following(user):
             self.followings.append(user)
 
     def unfollow(self, user):
-        if self.is_following(user):
+        if user != self and self.is_following(user):
             self.followings.remove(user)
 
     def has_starred(self, post):

@@ -34,9 +34,9 @@
 {% block scripts %}
   {{ super() }}
   <script>
-  $('.feed-item').slice(0, 10).show();
+  $('.feed-item').slice(0, 20).show();
   $('#more').click(function (e) {
-    $('.feed-item:hidden').slice(0, 10).show();
+    $('.feed-item:hidden').slice(0, 20).show();
     if ($('.feed-item:hidden').length == 0) {
       $('#more').hide();
     }

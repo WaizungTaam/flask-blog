@@ -17,6 +17,10 @@ def seed(table, count):
         seed_users(count)
     elif table == 'posts':
         seed_posts(count)
+    elif table == 'followers':
+        seed_followers()
+    else:
+        print('flask seed {users,posts,followers} [-c]')
 
 def seed_users(count):
     from app.user.models import User, Profile
@@ -42,6 +46,7 @@ def seed_users(count):
                 db.session.add(profile)
                 db.session.commit()
             except:
+                print('Error')
                 db.session.rollback()
             else:
                 break
@@ -85,3 +90,12 @@ def seed_posts(count):
             db.session.add(comment)
     db.session.commit()
     print('Added {} posts'.format(count))
+
+def seed_followers():
+    from app.user.models import User
+    for user in User.query.all():
+        for i in range(randint(1, 5)):
+            u = User.query.order_by(func.rand()).first()
+            user.follow(u)
+    db.session.commit()
+    print('Added followers')
