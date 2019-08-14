@@ -168,8 +168,6 @@ class ModelView:
     def insert(self):
         form = self.InsertForm()
         if form.validate_on_submit():
-            for key in self._insert_fields:
-                print(key, getattr(form, key).data)
             item = self.model(**{
                 key: self.postprocess(getattr(form, key).data) \
                 for key in self._insert_fields})
