@@ -1,7 +1,20 @@
 {% extends "base.html" %}
 
 {% block app_content %}
-  <h1>Posts</h1>
+  
+
+  <div class="row" style="position: relative;">
+    <div class="col-xs-5">
+      <h1>Posts</h1>
+    </div>
+    <div class="col-xs-5" style="position: absolute; bottom: 0; right: 0; width: 20rem;">
+      <select class="form-control">
+        <option value="?k=mtime&o=desc"{% if key == 'mtime' and order == 'desc' %} selected{% endif %}>Recently updated</option>
+        <option value="?k=read&o=desc"{% if key == 'read' and order == 'desc' %} selected{% endif %}>Most read</option>
+        <option value="?k=title&o=asc"{% if key == 'title' and order == 'asc' %} selected{% endif %}>Title</option>
+      </select>
+    </div>
+  </div>
 
   <div>
     {% for post in posts %}
@@ -48,3 +61,12 @@
     </ul>
   </nav>
 {% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    $('select').change(function() {
+      window.location = $('select option:selected').val();
+    })
+  </script>
+{%- endblock scripts %}

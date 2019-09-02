@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup, Comment
+from flask import request
 from app import db, markdown
 from app.post.models import Tag
 
@@ -32,3 +33,11 @@ def parse_tags(s, sep=','):
         tags.append(tag)
     db.session.commit()
     return tags
+
+def make_args(page):
+    args = request.args.copy()
+    if 'page' in args and page == 1:
+        del args['page']
+    else:
+        args['page'] = page
+    return args
